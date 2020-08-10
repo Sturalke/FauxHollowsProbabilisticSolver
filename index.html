@@ -13,6 +13,8 @@ var largeColor = 'lightseagreen';
 window.addEventListener("DOMContentLoaded", function() {
 	if (typeof jQuery == 'undefined') {
 		console.error("JQuery failed to load.");
+	} else {
+		console.log("JQuery loaded.");
 	}
 	$('.block').each(function(i, obj) {
 		$(this).hover(function() {
