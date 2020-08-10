@@ -11,11 +11,6 @@ var medColor = 'lawngreen';
 var largeColor = 'lightseagreen';
 
 window.addEventListener("DOMContentLoaded", function() {
-	if (typeof jQuery == 'undefined') {
-		alert("JQuery failed to load.");
-	} else {
-		alert("JQuery loaded.");
-	}
 	$('.block').each(function(i, obj) {
 		$(this).hover(function() {
 			$(this).stop(false, false);
