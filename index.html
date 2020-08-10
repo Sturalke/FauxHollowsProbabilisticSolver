@@ -206,44 +206,27 @@ function ShowScoresInBlocks() {
 }
 
 function MarkGuaranteedBlocks() {
-	var largeHit = 0;
-	var medHit = 0;
-
-	// Check for hits
-	for (var i = 0; i < 6; i++) {
-		for (var j = 0; j < 6; j++) {
-			if (window.currentGrid[i][j] == 5) {
-				largeHit++;
-			} else if (window.currentGrid[i][j] == 4) {
-				medHit++;
-			}
-		}
-	}
 
 	// Square
-	if (medHit > 0) {
-		var medMap = NaiiveMedProb();
-		for (var i = 0; i < 6; i++) {
-			for (var j = 0; j < 6; j++) {
-				if (medMap[i][j] == 1 && window.currentGrid[i][j] != 4) {
-					window.currentGrid[i][j] = 4;
-					var number = i * 6 + j + 1;
-					$('#container' + number).css('background-color', medColor).attr('name', medColor);
-				}
+	var medMap = NaiiveMedProb();
+	for (var i = 0; i < 6; i++) {
+		for (var j = 0; j < 6; j++) {
+			if (medMap[i][j] == 1 && window.currentGrid[i][j] != 4) {
+				window.currentGrid[i][j] = 4;
+				var number = i * 6 + j + 1;
+				$('#container' + number).css('background-color', medColor).attr('name', medColor);
 			}
 		}
 	}
 
 	// Large
-	if (largeHit > 0) {
-		var largeMap = NaiiveLargeProb();
-		for (var i = 0; i < 6; i++) {
-			for (var j = 0; j < 6; j++) {
-				if (largeMap[i][j] == 1 && window.currentGrid[i][j] != 5) {
-					window.currentGrid[i][j] = 5;
-					var number = i * 6 + j + 1;
-					$('#container' + number).css('background-color', largeColor).attr('name', largeColor);
-				}
+	var largeMap = NaiiveLargeProb();
+	for (var i = 0; i < 6; i++) {
+		for (var j = 0; j < 6; j++) {
+			if (largeMap[i][j] == 1 && window.currentGrid[i][j] != 5) {
+				window.currentGrid[i][j] = 5;
+				var number = i * 6 + j + 1;
+				$('#container' + number).css('background-color', largeColor).attr('name', largeColor);
 			}
 		}
 	}
@@ -251,7 +234,12 @@ function MarkGuaranteedBlocks() {
 
 function runGuaranteed() {
 	ParseGrid();
-	MarkGuaranteedBlocks();
+	
+	for(var i = 0; i < 2; i++) {
+		MarkGuaranteedBlocks();
+	}
+	
+	
 	var probs = CalculateFullProb();
 	var strategy = $("input[name='strategy']:checked").val();
 	switch (strategy) {
@@ -438,8 +426,8 @@ function NaiiveLargeProb() {
 	}
 
 	//Horizontal
-	for (var i = 0; i < 4; i++) {
-		for (var j = 0; j < 5; j++) {
+	for (var i = 0; i < 5; i++) {
+		for (var j = 0; j < 4; j++) {
 			var block1 = window.currentGrid[i][j];
 			var block2 = window.currentGrid[i][j + 1];
 			var block3 = window.currentGrid[i][j + 2];
@@ -467,8 +455,8 @@ function NaiiveLargeProb() {
 	}
 
 	//Vertical
-	for (var i = 0; i < 5; i++) {
-		for (var j = 0; j < 4; j++) {
+	for (var i = 0; i < 4; i++) {
+		for (var j = 0; j < 5; j++) {
 			var block1 = window.currentGrid[i][j];
 			var block2 = window.currentGrid[i][j + 1];
 			var block3 = window.currentGrid[i + 1][j];
@@ -483,7 +471,13 @@ function NaiiveLargeProb() {
 				block6 != 0) {
 				continue;
 			} else {
-
+				hitMap[i][j]++;
+				hitMap[i][j + 1]++;
+				hitMap[i + 1][j]++;
+				hitMap[i + 1][j + 1]++;
+				hitMap[i + 2][j]++;
+				hitMap[i + 2][j + 1]++;
+				probCount++;
 			}
 		}
 	}
