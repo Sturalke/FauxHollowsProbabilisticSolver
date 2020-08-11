@@ -123,6 +123,18 @@ function ChangeBoxLabel() {
 	}
 }
 
+function largeDirectionCheck(sourceCheckbox) {
+	var horizontal = $('#largeDirectionH').is(':checked');
+	var vertical = $('#largeDirectionV').is(':checked');
+	if(!horizontal && !vertical) {
+		if(sourceCheckbox == 1) {
+			$('#largeDirectionV').prop("checked", true);
+		} else {
+			$('#largeDirectionH').prop("checked", true);
+		}
+	}
+}
+
 var currentScores = Prefilled2DArray(6, 6, 0);
 
 var currentGrid = [];
@@ -207,6 +219,8 @@ function ShowScoresInBlocks() {
 
 function MarkGuaranteedBlocks() {
 
+	//var fullprob = CalculateFullProb();
+
 	// Square
 	var medMap = NaiiveMedProb();
 	for (var i = 0; i < 6; i++) {
@@ -230,6 +244,8 @@ function MarkGuaranteedBlocks() {
 			}
 		}
 	}
+	
+	console.log(largeMap);
 }
 
 function runGuaranteed() {
@@ -313,6 +329,10 @@ function NaiiveLargeProb() {
 	var hitMap = Prefilled2DArray(6, 6, 0);
 	var probCount = 0;
 	var hitLoc = [];
+	//debugger;
+	var horizontal = $('#largeDirectionH').prop("checked");
+	var vertical = $('#largeDirectionV').prop("checked");
+	
 
 	//Check for previous hit
 	for (var i = 0; i < 6; i++) {
@@ -327,91 +347,94 @@ function NaiiveLargeProb() {
 	}
 
 	if (hitCount > 0) {
-
-		//Horizontals
-		for (var i = 0; i < 2; i++) {
-			for (var j = 0; j < 3; j++) {
-				if (hitLoc[0] - (1 - i) < 0 || hitLoc[0] + i > 5 ||
-					hitLoc[1] - (2 - j) < 0 || hitLoc[1] + j > 5) {
-					continue;
-				}
-				var coords = [
-					[hitLoc[0] - (1 - i), hitLoc[1] - (2 - j)],
-					[hitLoc[0] - (1 - i), hitLoc[1] - (1 - j)],
-					[hitLoc[0] - (1 - i), hitLoc[1] + j],
-					[hitLoc[0] + i, hitLoc[1] - (2 - j)],
-					[hitLoc[0] + i, hitLoc[1] - (1 - j)],
-					[hitLoc[0] + i, hitLoc[1] + j]
-				];
-				var blocks = [];
-				blocks.push(window.currentGrid[coords[0][0]][coords[0][1]]);
-				blocks.push(window.currentGrid[coords[1][0]][coords[1][1]]);
-				blocks.push(window.currentGrid[coords[2][0]][coords[2][1]]);
-				blocks.push(window.currentGrid[coords[3][0]][coords[3][1]]);
-				blocks.push(window.currentGrid[coords[4][0]][coords[4][1]]);
-				blocks.push(window.currentGrid[coords[5][0]][coords[5][1]]);
-				var count = 0;
-				var hasObstacle = false;
-				for (var k = 0; k < 6; k++) {
-					if (blocks[k] == 5) {
-						count++;
-					} else if (blocks[k] != 0) {
-						hasObstacle = true;
-						break;
+		if(horizontal) {
+			//Horizontals
+			for (var i = 0; i < 2; i++) {
+				for (var j = 0; j < 3; j++) {
+					if (hitLoc[0] - (1 - i) < 0 || hitLoc[0] + i > 5 ||
+						hitLoc[1] - (2 - j) < 0 || hitLoc[1] + j > 5) {
+						continue;
 					}
-				}
-				if (!hasObstacle && count == hitCount) {
-					hitMap[coords[0][0]][coords[0][1]]++;
-					hitMap[coords[1][0]][coords[1][1]]++;
-					hitMap[coords[2][0]][coords[2][1]]++;
-					hitMap[coords[3][0]][coords[3][1]]++;
-					hitMap[coords[4][0]][coords[4][1]]++;
-					hitMap[coords[5][0]][coords[5][1]]++;
-					probCount++;
+					var coords = [
+						[hitLoc[0] - (1 - i), hitLoc[1] - (2 - j)],
+						[hitLoc[0] - (1 - i), hitLoc[1] - (1 - j)],
+						[hitLoc[0] - (1 - i), hitLoc[1] + j],
+						[hitLoc[0] + i, hitLoc[1] - (2 - j)],
+						[hitLoc[0] + i, hitLoc[1] - (1 - j)],
+						[hitLoc[0] + i, hitLoc[1] + j]
+					];
+					var blocks = [];
+					blocks.push(window.currentGrid[coords[0][0]][coords[0][1]]);
+					blocks.push(window.currentGrid[coords[1][0]][coords[1][1]]);
+					blocks.push(window.currentGrid[coords[2][0]][coords[2][1]]);
+					blocks.push(window.currentGrid[coords[3][0]][coords[3][1]]);
+					blocks.push(window.currentGrid[coords[4][0]][coords[4][1]]);
+					blocks.push(window.currentGrid[coords[5][0]][coords[5][1]]);
+					var count = 0;
+					var hasObstacle = false;
+					for (var k = 0; k < 6; k++) {
+						if (blocks[k] == 5) {
+							count++;
+						} else if (blocks[k] != 0) {
+							hasObstacle = true;
+							break;
+						}
+					}
+					if (!hasObstacle && count == hitCount) {
+						hitMap[coords[0][0]][coords[0][1]]++;
+						hitMap[coords[1][0]][coords[1][1]]++;
+						hitMap[coords[2][0]][coords[2][1]]++;
+						hitMap[coords[3][0]][coords[3][1]]++;
+						hitMap[coords[4][0]][coords[4][1]]++;
+						hitMap[coords[5][0]][coords[5][1]]++;
+						probCount++;
+					}
 				}
 			}
 		}
 
-		//Verticals
-		for (var i = 0; i < 3; i++) {
-			for (var j = 0; j < 2; j++) {
-				if (hitLoc[0] - (2 - i) < 0 || hitLoc[0] + i > 5 ||
-					hitLoc[1] - (1 - j) < 0 || hitLoc[1] + j > 5) {
-					continue;
-				}
-				var coords = [
-					[hitLoc[0] - (2 - i), hitLoc[1] - (1 - j)],
-					[hitLoc[0] - (1 - i), hitLoc[1] + j],
-					[hitLoc[0] + i, hitLoc[1] - (1 - j)],
-					[hitLoc[0] - (2 - i), hitLoc[1] + j],
-					[hitLoc[0] - (1 - i), hitLoc[1] - (1 - j)],
-					[hitLoc[0] + i, hitLoc[1] + j]
-				];
-				var blocks = [];
-				blocks.push(window.currentGrid[coords[0][0]][coords[0][1]]);
-				blocks.push(window.currentGrid[coords[1][0]][coords[1][1]]);
-				blocks.push(window.currentGrid[coords[2][0]][coords[2][1]]);
-				blocks.push(window.currentGrid[coords[3][0]][coords[3][1]]);
-				blocks.push(window.currentGrid[coords[4][0]][coords[4][1]]);
-				blocks.push(window.currentGrid[coords[5][0]][coords[5][1]]);
-				var count = 0;
-				var hasObstacle = false;
-				for (var k = 0; k < 6; k++) {
-					if (blocks[k] == 5) {
-						count++;
-					} else if (blocks[k] != 0) {
-						hasObstacle = true;
-						break;
+		if(vertical) {
+			//Verticals
+			for (var i = 0; i < 3; i++) {
+				for (var j = 0; j < 2; j++) {
+					if (hitLoc[0] - (2 - i) < 0 || hitLoc[0] + i > 5 ||
+						hitLoc[1] - (1 - j) < 0 || hitLoc[1] + j > 5) {
+						continue;
 					}
-				}
-				if (!hasObstacle && count == hitCount) {
-					hitMap[coords[0][0]][coords[0][1]]++;
-					hitMap[coords[1][0]][coords[1][1]]++;
-					hitMap[coords[2][0]][coords[2][1]]++;
-					hitMap[coords[3][0]][coords[3][1]]++;
-					hitMap[coords[4][0]][coords[4][1]]++;
-					hitMap[coords[5][0]][coords[5][1]]++;
-					probCount++;
+					var coords = [
+						[hitLoc[0] - (2 - i), hitLoc[1] - (1 - j)],
+						[hitLoc[0] - (1 - i), hitLoc[1] + j],
+						[hitLoc[0] + i, hitLoc[1] - (1 - j)],
+						[hitLoc[0] - (2 - i), hitLoc[1] + j],
+						[hitLoc[0] - (1 - i), hitLoc[1] - (1 - j)],
+						[hitLoc[0] + i, hitLoc[1] + j]
+					];
+					var blocks = [];
+					blocks.push(window.currentGrid[coords[0][0]][coords[0][1]]);
+					blocks.push(window.currentGrid[coords[1][0]][coords[1][1]]);
+					blocks.push(window.currentGrid[coords[2][0]][coords[2][1]]);
+					blocks.push(window.currentGrid[coords[3][0]][coords[3][1]]);
+					blocks.push(window.currentGrid[coords[4][0]][coords[4][1]]);
+					blocks.push(window.currentGrid[coords[5][0]][coords[5][1]]);
+					var count = 0;
+					var hasObstacle = false;
+					for (var k = 0; k < 6; k++) {
+						if (blocks[k] == 5) {
+							count++;
+						} else if (blocks[k] != 0) {
+							hasObstacle = true;
+							break;
+						}
+					}
+					if (!hasObstacle && count == hitCount) {
+						hitMap[coords[0][0]][coords[0][1]]++;
+						hitMap[coords[1][0]][coords[1][1]]++;
+						hitMap[coords[2][0]][coords[2][1]]++;
+						hitMap[coords[3][0]][coords[3][1]]++;
+						hitMap[coords[4][0]][coords[4][1]]++;
+						hitMap[coords[5][0]][coords[5][1]]++;
+						probCount++;
+					}
 				}
 			}
 		}
@@ -424,63 +447,70 @@ function NaiiveLargeProb() {
 
 		return hitMap;
 	}
-
-	//Horizontal
-	for (var i = 0; i < 5; i++) {
-		for (var j = 0; j < 4; j++) {
-			var block1 = window.currentGrid[i][j];
-			var block2 = window.currentGrid[i][j + 1];
-			var block3 = window.currentGrid[i][j + 2];
-			var block4 = window.currentGrid[i + 1][j];
-			var block5 = window.currentGrid[i + 1][j + 1];
-			var block6 = window.currentGrid[i + 1][j + 2];
-			if (block1 != 0 ||
-				block2 != 0 ||
-				block3 != 0 ||
-				block4 != 0 ||
-				block5 != 0 ||
-				block6 != 0) {
-				continue;
-			} else {
-				hitMap[i][j]++;
-				hitMap[i][j + 1]++;
-				hitMap[i][j + 2]++;
-				hitMap[i + 1][j]++;
-				hitMap[i + 1][j + 1]++;
-				hitMap[i + 1][j + 2]++;
-				probCount++;
-			}
-
-		}
-	}
-
-	//Vertical
-	for (var i = 0; i < 4; i++) {
-		for (var j = 0; j < 5; j++) {
-			var block1 = window.currentGrid[i][j];
-			var block2 = window.currentGrid[i][j + 1];
-			var block3 = window.currentGrid[i + 1][j];
-			var block4 = window.currentGrid[i + 1][j + 1];
-			var block5 = window.currentGrid[i + 2][j];
-			var block6 = window.currentGrid[i + 2][j + 1];
-			if (block1 != 0 ||
-				block2 != 0 ||
-				block3 != 0 ||
-				block4 != 0 ||
-				block5 != 0 ||
-				block6 != 0) {
-				continue;
-			} else {
-				hitMap[i][j]++;
-				hitMap[i][j + 1]++;
-				hitMap[i + 1][j]++;
-				hitMap[i + 1][j + 1]++;
-				hitMap[i + 2][j]++;
-				hitMap[i + 2][j + 1]++;
-				probCount++;
+	
+	if(horizontal) {
+		//Horizontal
+		for (var i = 0; i < 5; i++) {
+			for (var j = 0; j < 4; j++) {
+				var block1 = window.currentGrid[i][j];
+				var block2 = window.currentGrid[i][j + 1];
+				var block3 = window.currentGrid[i][j + 2];
+				var block4 = window.currentGrid[i + 1][j];
+				var block5 = window.currentGrid[i + 1][j + 1];
+				var block6 = window.currentGrid[i + 1][j + 2];
+				if (block1 != 0 ||
+					block2 != 0 ||
+					block3 != 0 ||
+					block4 != 0 ||
+					block5 != 0 ||
+					block6 != 0) {
+					continue;
+				} else {
+					hitMap[i][j]++;
+					hitMap[i][j + 1]++;
+					hitMap[i][j + 2]++;
+					hitMap[i + 1][j]++;
+					hitMap[i + 1][j + 1]++;
+					hitMap[i + 1][j + 2]++;
+					probCount++;
+				}
+	
 			}
 		}
 	}
+
+	if(vertical) {
+		//Vertical
+		for (var i = 0; i < 4; i++) {
+			for (var j = 0; j < 5; j++) {
+				var block1 = window.currentGrid[i][j];
+				var block2 = window.currentGrid[i][j + 1];
+				var block3 = window.currentGrid[i + 1][j];
+				var block4 = window.currentGrid[i + 1][j + 1];
+				var block5 = window.currentGrid[i + 2][j];
+				var block6 = window.currentGrid[i + 2][j + 1];
+				if (block1 != 0 ||
+					block2 != 0 ||
+					block3 != 0 ||
+					block4 != 0 ||
+					block5 != 0 ||
+					block6 != 0) {
+					continue;
+				} else {
+					hitMap[i][j]++;
+					hitMap[i][j + 1]++;
+					hitMap[i + 1][j]++;
+					hitMap[i + 1][j + 1]++;
+					hitMap[i + 2][j]++;
+					hitMap[i + 2][j + 1]++;
+					probCount++;
+				}
+			}
+		}
+	}
+	
+	console.log(hitMap);
+	console.log(probCount);
 
 	for (var i = 0; i < 6; i++) {
 		for (var j = 0; j < 6; j++) {
@@ -569,6 +599,8 @@ function CalculateFullProb() {
 	var hitMap = Prefilled3DArray(6, 6, 3, 0);
 	var hitCount = 0;
 	var currentHits = [0, 0, 0];
+	var horizontal = $('#largeDirectionH').prop("checked");
+	var vertical = $('#largeDirectionV').prop("checked");
 
 	for (var i = 0; i < 6; i++) {
 		for (var j = 0; j < 6; j++) {
@@ -635,98 +667,102 @@ function CalculateFullProb() {
 							gridMedAdded[iMed][jMed + 1] = 4;
 							gridMedAdded[iMed + 1][jMed] = 4;
 							gridMedAdded[iMed + 1][jMed + 1] = 4;
-
+							
+							if(horizontal) {
 							//Horizontal Larges
-							for (var iLg = 0; iLg < 5; iLg++) {
-								for (var jLg = 0; jLg < 4; jLg++) {
+								for (var iLg = 0; iLg < 5; iLg++) {
+									for (var jLg = 0; jLg < 4; jLg++) {
 
-									var largeBlocks = [
-										gridMedAdded[iLg][jLg],
-										gridMedAdded[iLg][jLg + 1],
-										gridMedAdded[iLg][jLg + 2],
-										gridMedAdded[iLg + 1][jLg],
-										gridMedAdded[iLg + 1][jLg + 1],
-										gridMedAdded[iLg + 1][jLg + 2]
-									];
+										var largeBlocks = [
+											gridMedAdded[iLg][jLg],
+											gridMedAdded[iLg][jLg + 1],
+											gridMedAdded[iLg][jLg + 2],
+											gridMedAdded[iLg + 1][jLg],
+											gridMedAdded[iLg + 1][jLg + 1],
+											gridMedAdded[iLg + 1][jLg + 2]
+										];
 
-									var largeTotalInPlacement = 0;
-									for (var j = 0; j < 6; j++) {
-										if (largeBlocks[j] == 5) {
-											largeTotalInPlacement++;
+										var largeTotalInPlacement = 0;
+										for (var j = 0; j < 6; j++) {
+											if (largeBlocks[j] == 5) {
+												largeTotalInPlacement++;
+											}
+										}
+
+										if (largeTotalInPlacement == currentHits[2] &&
+											(largeBlocks[0] == 0 || largeBlocks[0] == 5) &&
+											(largeBlocks[1] == 0 || largeBlocks[1] == 5) &&
+											(largeBlocks[2] == 0 || largeBlocks[2] == 5) &&
+											(largeBlocks[3] == 0 || largeBlocks[3] == 5) &&
+											(largeBlocks[4] == 0 || largeBlocks[4] == 5) &&
+											(largeBlocks[5] == 0 || largeBlocks[5] == 5)) {
+
+											hitMap[iSm][jSm][0]++;
+
+											hitMap[iMed][jMed][1]++;
+											hitMap[iMed][jMed + 1][1]++;
+											hitMap[iMed + 1][jMed][1]++;
+											hitMap[iMed + 1][jMed + 1][1]++;
+
+											hitMap[iLg][jLg][2]++;
+											hitMap[iLg][jLg + 1][2]++;
+											hitMap[iLg][jLg + 2][2]++;
+											hitMap[iLg + 1][jLg][2]++;
+											hitMap[iLg + 1][jLg + 1][2]++;
+											hitMap[iLg + 1][jLg + 2][2]++;
+											hitCount++;
 										}
 									}
-
-									if (largeTotalInPlacement == currentHits[2] &&
-										(largeBlocks[0] == 0 || largeBlocks[0] == 5) &&
-										(largeBlocks[1] == 0 || largeBlocks[1] == 5) &&
-										(largeBlocks[2] == 0 || largeBlocks[2] == 5) &&
-										(largeBlocks[3] == 0 || largeBlocks[3] == 5) &&
-										(largeBlocks[4] == 0 || largeBlocks[4] == 5) &&
-										(largeBlocks[5] == 0 || largeBlocks[5] == 5)) {
-
-										hitMap[iSm][jSm][0]++;
-
-										hitMap[iMed][jMed][1]++;
-										hitMap[iMed][jMed + 1][1]++;
-										hitMap[iMed + 1][jMed][1]++;
-										hitMap[iMed + 1][jMed + 1][1]++;
-
-										hitMap[iLg][jLg][2]++;
-										hitMap[iLg][jLg + 1][2]++;
-										hitMap[iLg][jLg + 2][2]++;
-										hitMap[iLg + 1][jLg][2]++;
-										hitMap[iLg + 1][jLg + 1][2]++;
-										hitMap[iLg + 1][jLg + 2][2]++;
-										hitCount++;
-									}
 								}
-							} // End Horizontal Larges
+							}// End Horizontal Larges
 
-							//Vertical Larges
-							for (var iLg = 0; iLg < 4; iLg++) {
-								for (var jLg = 0; jLg < 5; jLg++) {
+							if(vertical) {
+								//Vertical Larges
+								for (var iLg = 0; iLg < 4; iLg++) {
+									for (var jLg = 0; jLg < 5; jLg++) {
 
-									var largeBlocks = [
-										gridMedAdded[iLg][jLg],
-										gridMedAdded[iLg][jLg + 1],
-										gridMedAdded[iLg + 1][jLg],
-										gridMedAdded[iLg + 1][jLg + 1],
-										gridMedAdded[iLg + 2][jLg],
-										gridMedAdded[iLg + 2][jLg + 1]
-									];
+										var largeBlocks = [
+											gridMedAdded[iLg][jLg],
+											gridMedAdded[iLg][jLg + 1],
+											gridMedAdded[iLg + 1][jLg],
+											gridMedAdded[iLg + 1][jLg + 1],
+											gridMedAdded[iLg + 2][jLg],
+											gridMedAdded[iLg + 2][jLg + 1]
+										];
 
-									var largeTotalInPlacement = 0;
-									for (var j = 0; j < 6; j++) {
-										if (largeBlocks[j] == 5) {
-											largeTotalInPlacement++;
+										var largeTotalInPlacement = 0;
+										for (var j = 0; j < 6; j++) {
+											if (largeBlocks[j] == 5) {
+												largeTotalInPlacement++;
+											}
+										}
+
+										if (largeTotalInPlacement == currentHits[2] &&
+											(largeBlocks[0] == 0 || largeBlocks[0] == 5) &&
+											(largeBlocks[1] == 0 || largeBlocks[1] == 5) &&
+											(largeBlocks[2] == 0 || largeBlocks[2] == 5) &&
+											(largeBlocks[3] == 0 || largeBlocks[3] == 5) &&
+											(largeBlocks[4] == 0 || largeBlocks[4] == 5) &&
+											(largeBlocks[5] == 0 || largeBlocks[5] == 5)) {
+	
+											hitMap[iSm][jSm][0]++;
+
+											hitMap[iMed][jMed][1]++;
+											hitMap[iMed][jMed + 1][1]++;
+											hitMap[iMed + 1][jMed][1]++;
+											hitMap[iMed + 1][jMed + 1][1]++;
+
+											hitMap[iLg][jLg][2]++;
+											hitMap[iLg][jLg + 1][2]++;
+											hitMap[iLg + 1][jLg][2]++;
+											hitMap[iLg + 1][jLg + 1][2]++;
+											hitMap[iLg + 2][jLg][2]++;
+											hitMap[iLg + 2][jLg + 1][2]++;
+											hitCount++;
 										}
 									}
-
-									if (largeTotalInPlacement == currentHits[2] &&
-										(largeBlocks[0] == 0 || largeBlocks[0] == 5) &&
-										(largeBlocks[1] == 0 || largeBlocks[1] == 5) &&
-										(largeBlocks[2] == 0 || largeBlocks[2] == 5) &&
-										(largeBlocks[3] == 0 || largeBlocks[3] == 5) &&
-										(largeBlocks[4] == 0 || largeBlocks[4] == 5) &&
-										(largeBlocks[5] == 0 || largeBlocks[5] == 5)) {
-
-										hitMap[iSm][jSm][0]++;
-
-										hitMap[iMed][jMed][1]++;
-										hitMap[iMed][jMed + 1][1]++;
-										hitMap[iMed + 1][jMed][1]++;
-										hitMap[iMed + 1][jMed + 1][1]++;
-
-										hitMap[iLg][jLg][2]++;
-										hitMap[iLg][jLg + 1][2]++;
-										hitMap[iLg + 1][jLg][2]++;
-										hitMap[iLg + 1][jLg + 1][2]++;
-										hitMap[iLg + 2][jLg][2]++;
-										hitMap[iLg + 2][jLg + 1][2]++;
-										hitCount++;
-									}
 								}
-							} // End Vertical Larges
+							}// End Vertical Larges
 						}
 					}
 				} // End Mediums
@@ -777,7 +813,7 @@ body {
 }
 
 #contentbox {
-	width: 803px;
+	width: 1080px;
 }
 
 #titlebar {
@@ -817,7 +853,7 @@ h2 {
 #picker {
 	margin-left: 7px;
 	width: 100%;
-	height: 21%;
+	height: 26%;
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: center;
@@ -943,8 +979,20 @@ h2 {
 	display: block;
 }
 
+.menucolumncontainer {
+	display: flex;
+}
+
+.menucolumn {
+	width: 98px;
+}
+
+.menucolumncontent {
+	margin: 0;
+}
+
 .menulabel {
-	width: 50%;
+	min-width: 20px;
 	font: 18px Calibri;
 	color: white;
 }
@@ -961,7 +1009,7 @@ h1 {
 	margin-left: 0;
 	margin-bottom: 3px;
 	margin-top: 3px;
-	font: 25px Calibri;
+	font: 22px Calibri;
 	color: darksalmon;
 }
 
@@ -1061,6 +1109,7 @@ h3 {
 	color: white;
 	font: 17px Calibri;
 	margin-left: 20px;
+	margin-right: 20px;
 	word-wrap: break-word;
 }
 
@@ -1126,19 +1175,33 @@ h3 {
 							</label>
 						</div>
 					</form>
-					<div>
-						<h1>2x2 Type</h1>
-						<form action>
-							<div>
-								<input onclick="ChangeBoxLabel()" type="radio" id="boxtypecoffer" name="boxtype" value="coffer" Checked>
-								<label for="boxtypecoffer" class="menulabel">Coffer</label>
+					<div class="menucolumncontainer">
+						<div class="menucolumn">
+							<h1 class="menucolumncontent">2x2 Type</h1>
+							<form action>
+								<div class="menucolumncontent">
+									<input onclick="ChangeBoxLabel()" type="radio" id="boxtypecoffer" name="boxtype" value="coffer" Checked>
+									<label for="boxtypecoffer" class="menulabelsmall">Coffer</label>
+								</div>
+								<div class="menucolumncontent">
+									<input onclick="ChangeBoxLabel()" type="radio" id="boxtypegift" name="boxtype" value="gift">
+									<label for="boxtypegift" class="menulabelsmall">Gift Box</label>
+								</div>
+							</form>
+						</div>
+						<div class="menucolumn">
+							<h1 class="menucolumncontent">2x3 Bias</h1>
+							<div class="menucolumncontent">
+								<input onclick="largeDirectionCheck(1); LiveUpdate();" type="checkbox" id="largeDirectionH" value="h" Checked>
+								<label for="largeDirectionH" class="menulabelsmall">Horizontal</label>
 							</div>
-							<div>
-								<input onclick="ChangeBoxLabel()" type="radio" id="boxtypegift" name="boxtype" value="gift">
-								<label for="boxtypegift" class="menulabel">Gift Box</label>
+							<div class="menucolumncontent">
+								<input onclick="largeDirectionCheck(2); LiveUpdate();" type="checkbox" id="largeDirectionV" value="v" checked>
+								<label for="largeDirectionV" class="menulabelsmall">Vertical</label>
 							</div>
-						</form>
+						</div>
 					</div>
+					
 					<div>
 						<h1>Strategy</h1>
 						<form action>
@@ -1152,11 +1215,11 @@ h3 {
 							</div>
 							<div>
 								<input type="radio" id="strategy3" name="strategy" value="strat3" onclick="LiveUpdate();">
-								<label for="strategy3" class="menulabelsmall">Swords</label>
+								<label id="medstratlabel" for="strategy3" class="menulabelsmall">Swords</label>
 							</div>
 							<div>
 								<input type="radio" id="strategy4" name="strategy" value="strat4" onclick="LiveUpdate();">
-								<label id="medstratlabel" for="strategy4" class="menulabelsmall">Coffer</label>
+								<label for="strategy4" class="menulabelsmall">Coffer</label>
 							</div>
 							<div>
 								<input type="radio" id="strategy5" name="strategy" value="strat5" onclick="LiveUpdate();">
@@ -1243,10 +1306,27 @@ h3 {
 					Click on a box to apply the selected type.
 				</span>
 				<span class="description">
-					Select a strategy and set weight values. Note: Weights only apply to "Weighted" strategy.
+					Select a strategy and set weight values.
 				</span>
 				<span class="description">
 					Click "Apply" to calculate the next move if live updates are off.
+				</span>
+				<span class="description">
+					Yellow boxes indicate the best current choice based on strategy.
+				</span>
+				<span class="description">
+					When 2x3 is uncovered, the graphic can be used to determine it's full location, or just it's orientation, or just don't bother.
+				</span>
+				<span class="description">
+					If only the orientation is determined, uncheck either the vertical or horizontal orientation to remove it from the calculation.
+				</span>
+				<br>
+				<span class="description">
+					Note: Weights only apply to "Weighted" strategy.
+				</span>
+				<br>
+				<span class="description">
+					Suggestion: If using weights, change the swords weight to 5 after a retelling.
 				</span>
 				<h3>
 					About
@@ -1291,4 +1371,5 @@ h3 {
 		</div>
 	</div>
 </body>
+
 </html>
