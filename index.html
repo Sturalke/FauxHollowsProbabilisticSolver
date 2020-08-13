@@ -110,6 +110,7 @@ function ChangeBoxLabel() {
 		$("#boxlabel").html("Coffer");
 		$("#menuitemhitmedbox").html("Coffer");
 		$('#medstratlabel').html("Coffer");
+		$('#medstratlabel2').html("Coffer");
 		if ($("#medWeight").val() == 10) {
 			$("#medWeight").val(20)
 		}
@@ -117,6 +118,7 @@ function ChangeBoxLabel() {
 		$("#boxlabel").html("Gift Box");
 		$("#menuitemhitmedbox").html("Gift Box");
 		$('#medstratlabel').html("Gift Box");
+		$('#medstratlabel2').html("Gift Box");
 		if ($("#medWeight").val() == 20) {
 			$("#medWeight").val(10)
 		}
@@ -245,7 +247,6 @@ function MarkGuaranteedBlocks() {
 		}
 	}
 	
-	console.log(largeMap);
 }
 
 function runGuaranteed() {
@@ -255,24 +256,34 @@ function runGuaranteed() {
 		MarkGuaranteedBlocks();
 	}
 	
-	
-	var probs = CalculateFullProb();
 	var strategy = $("input[name='strategy']:checked").val();
 	switch (strategy) {
 		case 'strat1':
-			window.currentScores = fullProbScores(probs);
+			window.currentScores = fullProbScores(CalculateFullProb());
 			break;
 		case 'strat2':
-			window.currentScores = weightedScores(probs);
+			window.currentScores = weightedScores(CalculateFullProb());
 			break;
 		case 'strat3':
-			window.currentScores = swordsScores(probs);
+			window.currentScores = swordsScores(CalculateFullProb());
 			break;
 		case 'strat4':
-			window.currentScores = boxScores(probs);
+			window.currentScores = boxScores(CalculateFullProb());
 			break;
 		case 'strat5':
-			window.currentScores = foxScores(probs);
+			window.currentScores = foxScores(CalculateFullProb());
+			break;
+		case 'strat6':
+			window.currentScores = wfProbScores(CalculateProbWithoutFox());
+			break;
+		case 'strat7':
+			window.currentScores = weightedWFScores(CalculateProbWithoutFox());
+			break;
+		case 'strat8':
+			window.currentScores = swordsWFScores(CalculateProbWithoutFox());
+			break;
+		case 'strat9':
+			window.currentScores = boxWFScores(CalculateProbWithoutFox());
 			break;
 		default:
 			break;
@@ -321,6 +332,38 @@ function boxScores(probs) {
 }
 
 function foxScores(probs) {
+	return probs[0];
+}
+
+function wfProbScores(probs) {
+	var newScores = Prefilled2DArray(6, 6, 0);
+	for (var i = 0; i < 6; i++) {
+		for (var j = 0; j < 6; j++) {
+			var newProb = (1 - probs[0][i][j]) * (1 - probs[1][i][j]);
+			newProb = 1 - newProb;
+			newScores[i][j] = newProb;
+		}
+	}
+	return newScores;
+}
+
+function weightedWFScores(probs) {
+	var newScores = Prefilled2DArray(6, 6, 0);
+	for (var i = 0; i < 6; i++) {
+		for (var j = 0; j < 6; j++) {
+			var boxWeighted = probs[0][i][j] * $('#medWeight').val();
+			var swordsWeighted = probs[1][i][j] * $('#largeWeight').val();
+			newScores[i][j] = boxWeighted + swordsWeighted;
+		}
+	}
+	return newScores;
+}
+
+function swordsWFScores(probs) {
+	return probs[1];
+}
+
+function boxWFScores(probs) {
 	return probs[0];
 }
 
@@ -509,9 +552,6 @@ function NaiiveLargeProb() {
 		}
 	}
 	
-	console.log(hitMap);
-	console.log(probCount);
-
 	for (var i = 0; i < 6; i++) {
 		for (var j = 0; j < 6; j++) {
 			hitMap[i][j] /= probCount;
@@ -791,6 +831,169 @@ function CalculateFullProb() {
 	return probabilityMaps;
 }
 
+// Functionally similar to CalculateFullProb()
+// Doesn't add Fox to calculation.
+function CalculateProbWithoutFox() {
+	var hitMap = Prefilled3DArray(6, 6, 2, 0);
+	var hitCount = 0;
+	var currentHits = [0, 0];
+	var horizontal = $('#largeDirectionH').prop("checked");
+	var vertical = $('#largeDirectionV').prop("checked");
+
+	for (var i = 0; i < 6; i++) {
+		for (var j = 0; j < 6; j++) {
+			if (currentGrid[i][j] == 4) {
+				currentHits[0]++;
+			}
+			if (currentGrid[i][j] == 5) {
+				currentHits[1]++;
+			}
+		}
+	}
+	
+	for (var iMed = 0; iMed < 5; iMed++) {
+		for (var jMed = 0; jMed < 5; jMed++) {
+
+			var smallBlocks = [
+				window.currentGrid[iMed][jMed],
+				window.currentGrid[iMed][jMed + 1],
+				window.currentGrid[iMed + 1][jMed],
+				window.currentGrid[iMed + 1][jMed + 1]
+			];
+
+			var smallTotalInPlacement = 0;
+			for (var i = 0; i < 4; i++) {
+				if (smallBlocks[i] == 4) {
+					smallTotalInPlacement++;
+				}
+			}
+
+			if (smallTotalInPlacement == currentHits[0] &&
+			   (smallBlocks[0] == 0 || smallBlocks[0] == 4) &&
+			   (smallBlocks[1] == 0 || smallBlocks[1] == 4) &&
+			   (smallBlocks[2] == 0 || smallBlocks[2] == 4) &&
+			   (smallBlocks[3] == 0 || smallBlocks[3] == 4)) {
+
+				var gridMedAdded = JSON.parse(JSON.stringify(window.currentGrid));
+				gridMedAdded[iMed][jMed] = 4;
+				gridMedAdded[iMed][jMed + 1] = 4;
+				gridMedAdded[iMed + 1][jMed] = 4;
+				gridMedAdded[iMed + 1][jMed + 1] = 4;
+							
+				if(horizontal) {
+				//Horizontal Larges
+					for (var iLg = 0; iLg < 5; iLg++) {
+						for (var jLg = 0; jLg < 4; jLg++) {
+
+							var largeBlocks = [
+								gridMedAdded[iLg][jLg],
+								gridMedAdded[iLg][jLg + 1],
+								gridMedAdded[iLg][jLg + 2],
+								gridMedAdded[iLg + 1][jLg],
+								gridMedAdded[iLg + 1][jLg + 1],
+								gridMedAdded[iLg + 1][jLg + 2]
+							];
+
+							var largeTotalInPlacement = 0;
+							for (var j = 0; j < 6; j++) {
+								if (largeBlocks[j] == 5) {
+									largeTotalInPlacement++;
+								}
+							}
+
+							if (largeTotalInPlacement == currentHits[1] &&
+							   (largeBlocks[0] == 0 || largeBlocks[0] == 5) &&
+							   (largeBlocks[1] == 0 || largeBlocks[1] == 5) &&
+							   (largeBlocks[2] == 0 || largeBlocks[2] == 5) &&
+							   (largeBlocks[3] == 0 || largeBlocks[3] == 5) &&
+							   (largeBlocks[4] == 0 || largeBlocks[4] == 5) &&
+							   (largeBlocks[5] == 0 || largeBlocks[5] == 5)) {
+
+								hitMap[iMed][jMed][0]++;
+								hitMap[iMed][jMed + 1][0]++;
+								hitMap[iMed + 1][jMed][0]++;
+								hitMap[iMed + 1][jMed + 1][0]++;
+
+								hitMap[iLg][jLg][1]++;
+								hitMap[iLg][jLg + 1][1]++;
+								hitMap[iLg][jLg + 2][1]++;
+								hitMap[iLg + 1][jLg][1]++;
+								hitMap[iLg + 1][jLg + 1][1]++;
+								hitMap[iLg + 1][jLg + 2][1]++;
+								hitCount++;
+							}
+						}
+					}
+				}// End Horizontal Larges
+
+				if(vertical) {
+					//Vertical Larges
+					for (var iLg = 0; iLg < 4; iLg++) {
+						for (var jLg = 0; jLg < 5; jLg++) {
+
+							var largeBlocks = [
+								gridMedAdded[iLg][jLg],
+								gridMedAdded[iLg][jLg + 1],
+								gridMedAdded[iLg + 1][jLg],
+								gridMedAdded[iLg + 1][jLg + 1],
+								gridMedAdded[iLg + 2][jLg],
+								gridMedAdded[iLg + 2][jLg + 1]
+							];
+
+							var largeTotalInPlacement = 0;
+							for (var j = 0; j < 6; j++) {
+								if (largeBlocks[j] == 5) {
+									largeTotalInPlacement++;
+								}
+							}
+
+							if (largeTotalInPlacement == currentHits[1] &&
+							   (largeBlocks[0] == 0 || largeBlocks[0] == 5) &&
+							   (largeBlocks[1] == 0 || largeBlocks[1] == 5) &&
+							   (largeBlocks[2] == 0 || largeBlocks[2] == 5) &&
+							   (largeBlocks[3] == 0 || largeBlocks[3] == 5) &&
+							   (largeBlocks[4] == 0 || largeBlocks[4] == 5) &&
+							   (largeBlocks[5] == 0 || largeBlocks[5] == 5)) {
+	
+								hitMap[iMed][jMed][0]++;
+								hitMap[iMed][jMed + 1][0]++;
+								hitMap[iMed + 1][jMed][0]++;
+								hitMap[iMed + 1][jMed + 1][0]++;
+
+								hitMap[iLg][jLg][1]++;
+								hitMap[iLg][jLg + 1][1]++;
+								hitMap[iLg + 1][jLg][1]++;
+								hitMap[iLg + 1][jLg + 1][1]++;
+								hitMap[iLg + 2][jLg][1]++;
+								hitMap[iLg + 2][jLg + 1][1]++;
+								hitCount++;
+							}
+						}
+					}
+				}// End Vertical Larges
+			}
+		}
+	} // End Mediums
+
+	// Probabilities Time
+
+	//LARGE HIT COUNT IS THE SAME AS TOTAL BOARD CONFIGS
+	//Formula: number of hits/total board configs
+	var probabilityMaps = [
+		Prefilled2DArray(6, 6, 0),
+		Prefilled2DArray(6, 6, 0)
+	];
+
+	for (var i = 0; i < 6; i++) {
+		for (var j = 0; j < 6; j++) {
+			probabilityMaps[0][i][j] = hitMap[i][j][0] / hitCount;
+			probabilityMaps[1][i][j] = hitMap[i][j][1] / hitCount;
+		}
+	}
+
+	return probabilityMaps;
+}
+
 // Stolen from Stackoverflow @Tyler
 function Prefilled2DArray(height, width, value) {
 	return Array.from(Array(height), _ => Array(width).fill(value));
@@ -820,7 +1023,6 @@ body {
 	position: absolute;
 	text-align: center;
 	top: 10px;
-	margin-left: 10px;
 	background-color: #3a3a3a;
 	width: 792px;
 	height: 75px;
@@ -837,7 +1039,6 @@ h2 {
 	position: absolute;
 	min-width: 792px;
 	top: 102px;
-	margin-left: 10px;
 }
 
 #sidebar {
@@ -1013,6 +1214,12 @@ h1 {
 	color: darksalmon;
 }
 
+h4 {
+	color: lightskyblue;
+	font: 16.5px Calibri;
+	padding-left: 25px;
+}
+
 .weights {
 	font: 18px Calibri;
 	width: 80px;
@@ -1088,9 +1295,8 @@ input[type=checkbox] {
 #descriptionbox {
 	position: absolute;
 	top: 655px;
-	margin-left: 10px;
 	background-color: #3a3a3a;
-	width: 793px;
+	width: 792px;
 	min-height: 100px;
 	padding-bottom: 10px;
 	border-radius: 8px;
@@ -1205,25 +1411,48 @@ h3 {
 					<div>
 						<h1>Strategy</h1>
 						<form action>
-							<div>
-								<input type="radio" id="strategy1" name="strategy" value="strat1" onclick="LiveUpdate();" Checked>
-								<label for="strategy1" class="menulabelsmall">Pure Probability</label>
-							</div>
-							<div>
-								<input type="radio" id="strategy2" name="strategy" value="strat2" onclick="LiveUpdate();">
-								<label for="strategy2" class="menulabelsmall">Weighted</label>
-							</div>
-							<div>
-								<input type="radio" id="strategy3" name="strategy" value="strat3" onclick="LiveUpdate();">
-								<label id="medstratlabel" for="strategy3" class="menulabelsmall">Swords</label>
-							</div>
-							<div>
-								<input type="radio" id="strategy4" name="strategy" value="strat4" onclick="LiveUpdate();">
-								<label for="strategy4" class="menulabelsmall">Coffer</label>
-							</div>
-							<div>
-								<input type="radio" id="strategy5" name="strategy" value="strat5" onclick="LiveUpdate();">
-								<label for="strategy5" class="menulabelsmall">Fox</label>
+							<div class="menucolumncontainer">
+								<div class="menucolumn">
+									<div class="menucolumncontent">
+										<input type="radio" id="strategy1" name="strategy" value="strat1" onclick="LiveUpdate();" Checked>
+										<label for="strategy1" class="menulabelsmall">Probability</label>
+									</div>
+									<div class="menucolumncontent">
+										<input type="radio" id="strategy2" name="strategy" value="strat2" onclick="LiveUpdate();">
+										<label for="strategy2" class="menulabelsmall">Weighted</label>
+									</div>
+									<div class="menucolumncontent">
+										<input type="radio" id="strategy3" name="strategy" value="strat3" onclick="LiveUpdate();">
+										<label for="strategy3" class="menulabelsmall">Swords</label>
+									</div>
+									<div class="menucolumncontent">
+										<input type="radio" id="strategy4" name="strategy" value="strat4" onclick="LiveUpdate();">
+										<label id="medstratlabel" for="strategy4" class="menulabelsmall">Coffer</label>
+									</div>
+									<div class="menucolumncontent">
+										<input type="radio" id="strategy5" name="strategy" value="strat5" onclick="LiveUpdate();">
+										<label for="strategy5" class="menulabelsmall">Fox</label>
+									</div>
+								</div>
+								<div class="menucolumn">
+									<h4 class="menucolumncontent">No Fox</h4>
+									<div class="menucolumncontent">
+										<input type="radio" id="strategy6" name="strategy" value="strat6" onclick="LiveUpdate();">
+										<label for="strategy6" class="menulabelsmall">Probability</label>
+									</div>
+									<div class="menucolumncontent">
+										<input type="radio" id="strategy7" name="strategy" value="strat7" onclick="LiveUpdate();">
+										<label for="strategy7" class="menulabelsmall">Weighted</label>
+									</div>
+									<div class="menucolumncontent">
+										<input type="radio" id="strategy8" name="strategy" value="strat8" onclick="LiveUpdate();">
+										<label for="strategy8" class="menulabelsmall">Swords</label>
+									</div>
+									<div class="menucolumncontent">
+										<input type="radio" id="strategy9" name="strategy" value="strat9" onclick="LiveUpdate();">
+										<label id="medstratlabel2" for="strategy9" class="menulabelsmall">Coffer</label>
+									</div>
+								</div>
 							</div>
 						</form>
 					</div>
@@ -1328,41 +1557,35 @@ h3 {
 				<span class="description">
 					Suggestion: If using weights, change the swords weight to 5 after a retelling.
 				</span>
+				<br>
 				<h3>
 					About
 				</h3>
 				<span class="description">
-					This is my attempt at making a statistical approach to to the Faux Hollows minigame set to release in 5.3.
+					This is an attempt at making a statistical approach to to the Faux Hollows minigame that released in 5.3.
 				</span>
 				<span class="description">
-					This, like other Faux Hollows solvers/calculators/simulators, having been created prior to the release of the content comes made with a number of basic assumptions:
+					Now that the minigame has been released, a number of assumptions were confirmed. Except for one:
 				</span>
 				<br>
 				<span class="description indented">
-					The grid will always be 6x6.
-				</span>
-				<span class="description indented">
-					The coffer/gift box will always be 2x2.
-				</span>
-				<span class="description indented">
-					The swords will always be either 2x3 or 3x2.
-				</span>
-				<span class="description indented">
-					There will only be either a coffer <b>OR</b> a gift box.
-				</span>
-				<span class="description indented">
-					One of each type will always spawn on the board.
+					The fox will <b>ALWAYS</b> appear.
 				</span>
 				<br>
 				<span class="description">
-					As such, the accuracy of this program is based purely on speculation.
+					This has since proven not to be the case. The fox is not guaranteed to appear. As such, additional strattegies have been added. These new strategies are listed under "No Fox" in the Strategies section.
 				</span>
 				<span class="description">
-					This program should <b>NOT</b> be trusted until we know more about the minigame.
+					The exact chance that the Fox will appear is not known, at least to me. If anyone should know this information, please contact me through one of the avenues below.
+				</span>
+				<br>
+				<h3>Minor disclaimer</h3>
+				<span class="description">
+					This calculator will <b>NOT</b> guarantee anything. Not a single reward is guaranteed for using this tool. What it provides is a statistical advantage. Even statistics, by it's nature, is falliable.
 				</span>
 				<br>
 				<span class="description">
-					Also, this is my first forray into web programming. If something breaks, send me a DM on Discord at Sturalke#0249. I'll do what I can to figure out what went wrong.
+					Also, this is my first forray into web programming. If something breaks, send me a DM on Discord at Sturalke#0249 or on Reddit at u/Sturalke. I'll do what I can to figure out what went wrong.
 				</span>
 				<span class="signature">
 					Created by Fyrin Niyuun on Faerie.
