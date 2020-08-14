@@ -128,11 +128,11 @@ function ChangeBoxLabel() {
 function largeDirectionCheck(sourceCheckbox) {
 	var horizontal = $('#largeDirectionH').is(':checked');
 	var vertical = $('#largeDirectionV').is(':checked');
-	if(!horizontal && !vertical) {
+	if(horizontal && vertical) {
 		if(sourceCheckbox == 1) {
-			$('#largeDirectionV').prop("checked", true);
+			$('#largeDirectionV').prop("checked", false);
 		} else {
-			$('#largeDirectionH').prop("checked", true);
+			$('#largeDirectionH').prop("checked", false);
 		}
 	}
 }
@@ -390,7 +390,7 @@ function NaiiveLargeProb() {
 	}
 
 	if (hitCount > 0) {
-		if(horizontal) {
+		if(horizontal || (!horizontal && !vertical)) {
 			//Horizontals
 			for (var i = 0; i < 2; i++) {
 				for (var j = 0; j < 3; j++) {
@@ -436,7 +436,7 @@ function NaiiveLargeProb() {
 			}
 		}
 
-		if(vertical) {
+		if(vertical || (!horizontal && !vertical)) {
 			//Verticals
 			for (var i = 0; i < 3; i++) {
 				for (var j = 0; j < 2; j++) {
@@ -491,7 +491,7 @@ function NaiiveLargeProb() {
 		return hitMap;
 	}
 	
-	if(horizontal) {
+	if(horizontal || (!horizontal && !vertical)) {
 		//Horizontal
 		for (var i = 0; i < 5; i++) {
 			for (var j = 0; j < 4; j++) {
@@ -522,7 +522,7 @@ function NaiiveLargeProb() {
 		}
 	}
 
-	if(vertical) {
+	if(vertical || (!horizontal && !vertical)) {
 		//Vertical
 		for (var i = 0; i < 4; i++) {
 			for (var j = 0; j < 5; j++) {
@@ -708,7 +708,7 @@ function CalculateFullProb() {
 							gridMedAdded[iMed + 1][jMed] = 4;
 							gridMedAdded[iMed + 1][jMed + 1] = 4;
 							
-							if(horizontal) {
+							if(horizontal || (!horizontal && !vertical)) {
 							//Horizontal Larges
 								for (var iLg = 0; iLg < 5; iLg++) {
 									for (var jLg = 0; jLg < 4; jLg++) {
@@ -756,7 +756,7 @@ function CalculateFullProb() {
 								}
 							}// End Horizontal Larges
 
-							if(vertical) {
+							if(vertical || (!horizontal && !vertical)) {
 								//Vertical Larges
 								for (var iLg = 0; iLg < 4; iLg++) {
 									for (var jLg = 0; jLg < 5; jLg++) {
@@ -880,7 +880,7 @@ function CalculateProbWithoutFox() {
 				gridMedAdded[iMed + 1][jMed] = 4;
 				gridMedAdded[iMed + 1][jMed + 1] = 4;
 							
-				if(horizontal) {
+				if(horizontal || (!horizontal && !vertical)) {
 				//Horizontal Larges
 					for (var iLg = 0; iLg < 5; iLg++) {
 						for (var jLg = 0; jLg < 4; jLg++) {
@@ -926,7 +926,7 @@ function CalculateProbWithoutFox() {
 					}
 				}// End Horizontal Larges
 
-				if(vertical) {
+				if(vertical || (!horizontal && !vertical)) {
 					//Vertical Larges
 					for (var iLg = 0; iLg < 4; iLg++) {
 						for (var jLg = 0; jLg < 5; jLg++) {
@@ -1396,13 +1396,13 @@ h3 {
 							</form>
 						</div>
 						<div class="menucolumn">
-							<h1 class="menucolumncontent">2x3 Bias</h1>
+							<h1 class="menucolumncontent">Sword Bias</h1>
 							<div class="menucolumncontent">
-								<input onclick="largeDirectionCheck(1); LiveUpdate();" type="checkbox" id="largeDirectionH" value="h" Checked>
+								<input onclick="largeDirectionCheck(1); LiveUpdate();" type="checkbox" id="largeDirectionH" value="h">
 								<label for="largeDirectionH" class="menulabelsmall">Horizontal</label>
 							</div>
 							<div class="menucolumncontent">
-								<input onclick="largeDirectionCheck(2); LiveUpdate();" type="checkbox" id="largeDirectionV" value="v" checked>
+								<input onclick="largeDirectionCheck(2); LiveUpdate();" type="checkbox" id="largeDirectionV" value="v">
 								<label for="largeDirectionV" class="menulabelsmall">Vertical</label>
 							</div>
 						</div>
@@ -1525,6 +1525,10 @@ h3 {
 
 			</div>
 			<div id="descriptionbox">
+				<br>
+				<span class="description">
+					Note: "2x2" is synonymous with "Coffer" or "Gift Box", and "Bias" is synonymous with "orientation".
+				</span>
 				<h3>
 					Instructions
 				</h3>
@@ -1544,10 +1548,13 @@ h3 {
 					Yellow boxes indicate the best current choice based on strategy.
 				</span>
 				<span class="description">
-					When 2x3 is uncovered, the graphic can be used to determine it's full location, or just it's orientation, or just don't bother.
+					When swords are uncovered, the graphic can be used to determine it's full location, or just it's orientation, or just don't bother.
 				</span>
 				<span class="description">
-					If only the orientation is determined, uncheck either the vertical or horizontal orientation to remove it from the calculation.
+					If only the orientation is determined, check either the vertical or horizontal bias.
+				</span>
+				<span class="description">
+					When 2x2 is uncovered, use the graphic to determine if it's a Coffer or a Gift Box.
 				</span>
 				<br>
 				<span class="description">
