@@ -106,8 +106,8 @@ h2 {
 }
 
 #menuitemmissbox {
-	background-color: firebrick;
-	border-color: firebrick;
+	background-color: rgb(106, 2, 19);
+	border-color: rgb(106, 2, 19);
 }
 
 .radiolabel input:checked~#menuitemmissbox {
@@ -115,10 +115,8 @@ h2 {
 }
 
 #menuitemhitmedbox {
-	color: black;
-	font-weight: bold;
-	background-color: lawngreen;
-	border-color: lawngreen;
+	background-color: green;
+	border-color: green;
 }
 
 .radiolabel input:checked~#menuitemhitmedbox {
@@ -135,8 +133,8 @@ h2 {
 }
 
 #menuitemhitsmallbox {
-	background-color: purple;
-	border-color: purple;
+	background-color: rgb(148, 0, 230);
+	border-color: rgb(148, 0, 230);
 }
 
 .radiolabel input:checked~#menuitemhitsmallbox {

@@ -1,7 +1,7 @@
 var deadColor = 'grey';
-var missColor = 'firebrick';
-var smallColor = 'purple';
-var medColor = 'lawngreen';
+var missColor = 'rgb(106, 2, 19)';
+var smallColor = 'rgb(148, 0, 230)';
+var medColor = 'green';
 var medTitle = 'Coffer';
 var largeColor = 'lightseagreen';
 
