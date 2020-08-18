@@ -322,3 +322,19 @@ h3 {
 	margin-left: 20px;
 	text-align: center;
 }
+
+a {
+	color: white;
+}
+
+a:link {
+	color: lightskyblue;
+}
+
+a:visited {
+	color: lightskyblue;
+}
+
+a:active {
+	color: white;
+}
