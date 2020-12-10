@@ -108,8 +108,8 @@ function ChangeBoxLabel() {
 		$('#medstratlabel').html("Coffer");
 		$('#medstratlabel2').html("Coffer");
 		medTitle = 'Coffer';
-		if ($("#medWeight").val() == 10) {
-			$("#medWeight").val(20)
+		if ($("#medWeight").val() == 25) {
+			$("#medWeight").val(35)
 		}
 	} else {
 		$("#boxlabel").html("Gift Box");
@@ -117,8 +117,8 @@ function ChangeBoxLabel() {
 		$('#medstratlabel').html("Gift Box");
 		$('#medstratlabel2').html("Gift Box");
 		medTitle = 'Gift Box';
-		if ($("#medWeight").val() == 20) {
-			$("#medWeight").val(10)
+		if ($("#medWeight").val() == 35) {
+			$("#medWeight").val(25)
 		}
 	}
 	UpdateTitles();
