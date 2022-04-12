@@ -49,7 +49,6 @@ a:active {
 
 #app {
 	text-align: center;
-	overflow-x: hidden;
 }
 #main {
   display: inline-block;
@@ -293,10 +292,25 @@ a:active {
 .about {
 	display: block;
 	max-width: 400px;
+	margin-left: 10px;
+	margin-top: 0;
 }
 .about-pane {
 	box-sizing: border-box;
 	display: inline-block;
 	float: left;
 	width: 100%;
+}
+
+
+@media only screen and (max-width: 1105px) {
+	.contentpane {
+		float: none;
+	}
+	.about {
+		display: inline-block;
+		max-width: 400px;
+		margin-left: 0;
+		margin-top: 10px;
+	}
 }
