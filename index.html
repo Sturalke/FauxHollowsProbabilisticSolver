@@ -1,282 +1,334 @@
 <!DOCTYPE html>
-<html>
+<html lang="en-US">
+
 <head>
-<title>Faux Hollows Solver</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
-<script src="code.js"></script>
-<link rel="stylesheet" type="text/css" href="style.css">
+	<!--Site written by Fyrin Niyuun @ Behemoth. Formerly Fyrin Niyuun @ Faerie-->
+	<title>Faux Hallows Solver</title>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width,initial-scale=1.0">
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<link rel="shortcut icon" href="images/logo.png" type="image/png">
+	<!--script type="text/javascript" src="code.js"></script-->
 </head>
+
 <body>
-	<div id="contentwrapper">
-		<div id="contentbox">
-			<div id="titlebar">
-				<h2>
-					Faux Hollows Solver
-				</h2>
-			</div>
-			<div id="calccontainer">
-				<div id="sidebar">
+	<div id="app">
+		<div id="main">
+			<div id="content" class="contentpane dp-low rounded">
+				<div id="board" class="board">
+					<div id="cell00" class="board-cell optransition noselect" data-index="00">
+						<img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="" class="board-cell-icon" draggable="false" ondragstart="return false;"/>
+						<span class="board-cell-text"></span>
+					</div>
+					<div id="cell01" class="board-cell optransition noselect" data-index="01">
+						<img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="" class="board-cell-icon" draggable="false" ondragstart="return false;"/>
+						<span class="board-cell-text"></span>
+					</div>
+					<div id="cell02" class="board-cell optransition noselect" data-index="02">
+						<img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="" class="board-cell-icon" draggable="false" ondragstart="return false;"/>
+						<span class="board-cell-text"></span>
+					</div>
+					<div id="cell03" class="board-cell optransition noselect" data-index="03">
+						<img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="" class="board-cell-icon" draggable="false" ondragstart="return false;"/>
+						<span class="board-cell-text"></span>
+					</div>
+					<div id="cell04" class="board-cell optransition noselect" data-index="04">
+						<img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="" class="board-cell-icon" draggable="false" ondragstart="return false;"/>
+						<span class="board-cell-text"></span>
+					</div>
+					<div id="cell05" class="board-cell optransition noselect" data-index="05">
+						<img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="" class="board-cell-icon" draggable="false" ondragstart="return false;"/>
+						<span class="board-cell-text"></span>
+					</div>
+					<div id="cell06" class="board-cell optransition noselect" data-index="06">
+						<img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="" class="board-cell-icon" draggable="false" ondragstart="return false;"/>
+						<span class="board-cell-text"></span>
+					</div>
+					<div id="cell07" class="board-cell optransition noselect" data-index="07">
+						<img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="" class="board-cell-icon" draggable="false" ondragstart="return false;"/>
+						<span class="board-cell-text"></span>
+					</div>
+					<div id="cell08" class="board-cell optransition noselect" data-index="08">
+						<img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="" class="board-cell-icon" draggable="false" ondragstart="return false;"/>
+						<span class="board-cell-text"></span>
+					</div>
+					<div id="cell09" class="board-cell optransition noselect" data-index="09">
+						<img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="" class="board-cell-icon" draggable="false" ondragstart="return false;"/>
+						<span class="board-cell-text"></span>
+					</div>
+					<div id="cell10" class="board-cell optransition noselect" data-index="10">
+						<img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="" class="board-cell-icon" draggable="false" ondragstart="return false;"/>
+						<span class="board-cell-text"></span>
+					</div>
+					<div id="cell11" class="board-cell optransition noselect" data-index="11">
+						<img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="" class="board-cell-icon" draggable="false" ondragstart="return false;"/>
+						<span class="board-cell-text"></span>
+					</div>
+					<div id="cell12" class="board-cell optransition noselect" data-index="12">
+						<img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="" class="board-cell-icon" draggable="false" ondragstart="return false;"/>
+						<span class="board-cell-text"></span>
+					</div>
+					<div id="cell13" class="board-cell optransition noselect" data-index="13">
+						<img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="" class="board-cell-icon" draggable="false" ondragstart="return false;"/>
+						<span class="board-cell-text"></span>
+					</div>
+					<div id="cell14" class="board-cell optransition noselect" data-index="14">
+						<img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="" class="board-cell-icon" draggable="false" ondragstart="return false;"/>
+						<span class="board-cell-text"></span>
+					</div>
+					<div id="cell15" class="board-cell optransition noselect" data-index="15">
+						<img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="" class="board-cell-icon" draggable="false" ondragstart="return false;"/>
+						<span class="board-cell-text"></span>
+					</div>
+					<div id="cell16" class="board-cell optransition noselect" data-index="16">
+						<img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="" class="board-cell-icon" draggable="false" ondragstart="return false;"/>
+						<span class="board-cell-text"></span>
+					</div>
+					<div id="cell17" class="board-cell optransition noselect" data-index="17">
+						<img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="" class="board-cell-icon" draggable="false" ondragstart="return false;"/>
+						<span class="board-cell-text"></span>
+					</div>
+					<div id="cell18" class="board-cell optransition noselect" data-index="18">
+						<img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="" class="board-cell-icon" draggable="false" ondragstart="return false;"/>
+						<span class="board-cell-text"></span>
+					</div>
+					<div id="cell19" class="board-cell optransition noselect" data-index="19">
+						<img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="" class="board-cell-icon" draggable="false" ondragstart="return false;"/>
+						<span class="board-cell-text"></span>
+					</div>
+					<div id="cell20" class="board-cell optransition noselect" data-index="20">
+						<img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="" class="board-cell-icon" draggable="false" ondragstart="return false;"/>
+						<span class="board-cell-text"></span>
+					</div>
+					<div id="cell21" class="board-cell optransition noselect" data-index="21">
+						<img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="" class="board-cell-icon" draggable="false" ondragstart="return false;"/>
+						<span class="board-cell-text"></span>
+					</div>
+					<div id="cell22" class="board-cell optransition noselect" data-index="22">
+						<img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="" class="board-cell-icon" draggable="false" ondragstart="return false;"/>
+						<span class="board-cell-text"></span>
+					</div>
+					<div id="cell23" class="board-cell optransition noselect" data-index="23">
+						<img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="" class="board-cell-icon" draggable="false" ondragstart="return false;"/>
+						<span class="board-cell-text"></span>
+					</div>
+					<div id="cell24" class="board-cell optransition noselect" data-index="24">
+						<img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="" class="board-cell-icon" draggable="false" ondragstart="return false;"/>
+						<span class="board-cell-text"></span>
+					</div>
+					<div id="cell25" class="board-cell optransition noselect" data-index="25">
+						<img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="" class="board-cell-icon" draggable="false" ondragstart="return false;"/>
+						<span class="board-cell-text"></span>
+					</div>
+					<div id="cell26" class="board-cell optransition noselect" data-index="26">
+						<img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="" class="board-cell-icon" draggable="false" ondragstart="return false;"/>
+						<span class="board-cell-text"></span>
+					</div>
+					<div id="cell27" class="board-cell optransition noselect" data-index="27">
+						<img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="" class="board-cell-icon" draggable="false" ondragstart="return false;"/>
+						<span class="board-cell-text"></span>
+					</div>
+					<div id="cell28" class="board-cell optransition noselect" data-index="28">
+						<img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="" class="board-cell-icon" draggable="false" ondragstart="return false;"/>
+						<span class="board-cell-text"></span>
+					</div>
+					<div id="cell29" class="board-cell optransition noselect" data-index="29">
+						<img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="" class="board-cell-icon" draggable="false" ondragstart="return false;"/>
+						<span class="board-cell-text"></span>
+					</div>
+					<div id="cell30" class="board-cell optransition noselect" data-index="30">
+						<img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="" class="board-cell-icon" draggable="false" ondragstart="return false;"/>
+						<span class="board-cell-text"></span>
+					</div>
+					<div id="cell31" class="board-cell optransition noselect" data-index="31">
+						<img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="" class="board-cell-icon" draggable="false" ondragstart="return false;"/>
+						<span class="board-cell-text"></span>
+					</div>
+					<div id="cell32" class="board-cell optransition noselect" data-index="32">
+						<img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="" class="board-cell-icon" draggable="false" ondragstart="return false;"/>
+						<span class="board-cell-text"></span>
+					</div>
+					<div id="cell33" class="board-cell optransition noselect" data-index="33">
+						<img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="" class="board-cell-icon" draggable="false" ondragstart="return false;"/>
+						<span class="board-cell-text"></span>
+					</div>
+					<div id="cell34" class="board-cell optransition noselect" data-index="34">
+						<img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="" class="board-cell-icon" draggable="false" ondragstart="return false;"/>
+						<span class="board-cell-text"></span>
+					</div>
+					<div id="cell35" class="board-cell optransition noselect" data-index="35">
+						<img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="" class="board-cell-icon" draggable="false" ondragstart="return false;"/>
+						<span class="board-cell-text"></span>
+					</div>
+				</div>
+				<div class="h-separator"></div>
+				<div class="contentpane dp-high rounded controls">
 					<form action id="picker">
-						<div class="radiocontainer">
-							<label for="menuitemdeadcell" class="radiolabel">
-								<input type="radio" id="menuitemdeadcell" name="menu" value="deadcell" checked>
-								<span id="menuitemdeadcellbox" class="radiobox">Blocked</span>
+						<div class="radiocontainer noselect">
+							<label id="button1" for="blockedradiobutton" class="radiobuttonlabel optransition" title="Blocked">
+								<input type="radio" id="blockedradiobutton" name="pickeritem" value="blocked" checked>
+								<img src="https://img.icons8.com/external-flatart-icons-outline-flatarticons/64/000000/external-blocked-user-interface-flatart-icons-outline-flatarticons.png" class="radioimage" draggable="false" ondragstart="return false;"/>
 							</label>
+							<label for="button1" class="radiocaption">Blocked</label>
 						</div>
-						<div class="radiocontainer">
-							<label for="menuitemmiss" class="radiolabel">
-								<input type="radio" id="menuitemmiss" name="menu" value="miss">
-								<span id="menuitemmissbox" class="radiobox">Miss</span>
+						<div class="radiocontainer radiospace noselect">
+							<label id="button2" for="missedradiobutton" class="radiobuttonlabel optransition" title="Missed">
+								<input type="radio" id="missedradiobutton" name="pickeritem" value="missed">
+								<img src="https://img.icons8.com/glyph-neue/64/000000/firework-explosion.png" class="radioimage" draggable="false" ondragstart="return false;"/>
 							</label>
+							<label for="button2" class="radiocaption">Missed</label>
 						</div>
-						<div class="radiocontainer">
-							<label for="menuitemhitmed" class="radiolabel">
-								<input type="radio" id="menuitemhitmed" name="menu" value="medium">
-								<span id="menuitemhitmedbox" class="radiobox">Coffer</span>
+						<div class="radiocontainer radiospace noselect">
+							<label id="button3" for="chestradiobutton" class="radiobuttonlabel optransition" title="Chest">
+								<input type="radio" id="chestradiobutton" name="pickeritem" value="chest">
+								<img src="https://img.icons8.com/ios/50/000000/treasure-chest.png" class="radioimage" draggable="false" ondragstart="return false;"/>
 							</label>
+							<label for="button3" class="radiocaption">Coffer</label>
 						</div>
-						<div class="radiocontainer">
-							<label for="menuitemhitlarge" class="radiolabel">
-								<input type="radio" id="menuitemhitlarge" name="menu" value="large">
-								<span id="menuitemhitlargebox" class="radiobox">Swords</span>
+						<div class="radiocontainer radiospace noselect">
+							<label id="button4" for="swordsradiobutton" class="radiobuttonlabel optransition" title="Swords">
+								<input type="radio" id="swordsradiobutton" name="pickeritem" value="swords">
+								<img src="https://img.icons8.com/external-prettycons-lineal-prettycons/49/000000/external-swords-games-prettycons-lineal-prettycons.png" class="radioimage" draggable="false" ondragstart="return false;"/>
 							</label>
+							<label for="button4" class="radiocaption">Swords</label>
 						</div>
-						<div class="radiocontainer">
-							<label for="menuitemhitsmall" class="radiolabel">
-								<input type="radio" id="menuitemhitsmall" name="menu" value="small">
-								<span id="menuitemhitsmallbox" class="radiobox">Fox</span>
+						<div class="radiocontainer radiospace noselect">
+							<label id="button5" for="foxradiobutton" class="radiobuttonlabel optransition" title="Fox">
+								<input type="radio" id="foxradiobutton" name="pickeritem" value="fox">
+								<img src="https://img.icons8.com/external-tulpahn-basic-outline-tulpahn/48/000000/external-fox-hokkaido-tulpahn-basic-outline-tulpahn.png" class="radioimage" draggable="false" ondragstart="return false;"/>
 							</label>
+							<label for="button5" class="radiocaption">Fox</label>
 						</div>
-						<div class="radiocontainer">
-							<label for="menuitemclear" class="radiolabel">
-								<input type="radio" id="menuitemclear" name="menu" value="clear">
-								<span id="menuitemclearbox" class="radiobox">Clear</span>
+						<div class="radiocontainer radiospace noselect">
+							<label id="button6" for="clearradiobutton" class="radiobuttonlabel optransition" title="Erase">
+								<input type="radio" id="clearradiobutton" name="pickeritem" value="clear">
+								<img src="https://img.icons8.com/ios-glyphs/60/000000/erase.png" class="radioimage" draggable="false" ondragstart="return false;"/>
 							</label>
+							<label for="button6" class="radiocaption">Erase</label>
 						</div>
 					</form>
-					<div class="menucolumncontainer">
-						<div class="menucolumn">
-							<h1 class="menucolumncontent">2x2 Type</h1>
-							<form action>
-								<div class="menucolumncontent">
-									<input onclick="ChangeBoxLabel()" type="radio" id="boxtypecoffer" name="boxtype" value="coffer" Checked>
-									<label for="boxtypecoffer" class="menulabelsmall">Coffer</label>
+					<div class="h-separator"></div>
+					<div class="button-row">
+						<label for="menucollapse" id="collapselabel" class="advanced-collapse-label noselect">
+							<input id="menucollapse" type="button" />
+							Advanced
+							<div id="arrow" class="arrow"></div>
+						</label>
+						<label for="resetbutton" id="resetbuttonlabel" class="reset-button-label noselect">
+							<input id="resetbutton" type="button" />
+							Reset
+						</label>
+					</div>
+					<div id="collapsebox" class="collapse-box">
+						<div class="h-separator"></div>
+						<div class="advanced-settings-box">
+							<form action id="strat" class="strat-form">
+								<h4>Strategy</h4>
+								<div class="settings-container">
+									<div>
+										<input type="radio" id="strat1" name="strat" value="strat1" checked>
+										<label for="strat1">Probability</label>
+									</div>
+									<div>
+										<input type="radio" id="strat2" name="strat" value="strat2">
+										<label for="strat2">Swords</label>
+									</div>
+									<div>
+										<input type="radio" id="strat3" name="strat" value="strat3">
+										<label for="strat3">Coffer</label>
+									</div>
+									<div>
+										<input type="radio" id="strat4" name="strat" value="strat4">
+										<label for="strat4">Fox</label>
+									</div>
 								</div>
-								<div class="menucolumncontent">
-									<input onclick="ChangeBoxLabel()" type="radio" id="boxtypegift" name="boxtype" value="gift">
-									<label for="boxtypegift" class="menulabelsmall">Gift Box</label>
+								<div class="settings-container">
+									<div>
+										<input type="radio" id="strat5" name="strat" value="strat5">
+										<label for="strat5">Weighted</label>
+									</div>
+									<div class="psuedo"></div>
+									<div class="psuedo"></div>
+									<div>
+										<input type="checkbox" id="lookforfox" checked>
+										<label for="lookforfox">Look for Fox</label>
+									</div>
+								</div>
+								<div class="settings-container">
+									
+									<div style="width: 140px;">
+										Weights
+										<div>
+											<input type="number" id="foxweight" value="100" pattern="[0-9]" min="0" max="100" class="weights">
+											<label>Fox</label>
+										</div>
+										<div>
+											<input type="number" id="boxweight" value="35" pattern="[0-9]" min="0" max="100" class="weights">
+											<label id="boxweightlabel">Coffer</label>
+										</div>
+										<div>
+											<input type="number" id="swordweight" value="30" pattern="[0-9]" min="0" max="100" class="weights">
+											<label>Swords</label>
+										</div>
+									</div>
 								</div>
 							</form>
-						</div>
-						<div class="menucolumn">
-							<h1 class="menucolumncontent">Sword Bias</h1>
-							<div class="menucolumncontent biaslabel">
-								<input onclick="largeDirectionCheck(1); LiveUpdate();" type="checkbox" id="largeDirectionH" value="h">
-								<label for="largeDirectionH" class="menulabelsmall">Horizontal</label>
-							</div>
-							<div class="menucolumncontent">
-								<input onclick="largeDirectionCheck(2); LiveUpdate();" type="checkbox" id="largeDirectionV" value="v">
-								<label for="largeDirectionV" class="menulabelsmall">Vertical</label>
-							</div>
-						</div>
-					</div>
-					
-					<div>
-						<h1>Strategy</h1>
-						<form action>
-							<div class="menucolumncontainer">
-								<div class="menucolumn">
-									<div class="menucolumncontent">
-										<input type="radio" id="strategy1" name="strategy" value="strat1" onclick="LiveUpdate();" Checked>
-										<label for="strategy1" class="menulabelsmall">Probability</label>
+							<div class="settings-container settings-right-align">
+								<form action class="box-type">
+									<div>
+										<label for="box1">Coffer</label>
+										<input type="radio" id="box1" name="boxtype" value="box1" onclick="UpdateCoffer();" checked>
 									</div>
-									<div class="menucolumncontent">
-										<input type="radio" id="strategy2" name="strategy" value="strat2" onclick="LiveUpdate();">
-										<label for="strategy2" class="menulabelsmall">Weighted</label>
+									<div>
+										<label for="box2">Gift Box</label>
+										<input type="radio" id="box2" name="boxtype" value="box2" onclick="UpdateCoffer();">
 									</div>
-									<div class="menucolumncontent">
-										<input type="radio" id="strategy3" name="strategy" value="strat3" onclick="LiveUpdate();">
-										<label for="strategy3" class="menulabelsmall">Swords</label>
-									</div>
-									<div class="menucolumncontent">
-										<input type="radio" id="strategy4" name="strategy" value="strat4" onclick="LiveUpdate();">
-										<label id="medstratlabel" for="strategy4" class="menulabelsmall">Coffer</label>
-									</div>
-									<div class="menucolumncontent">
-										<input type="radio" id="strategy5" name="strategy" value="strat5" onclick="LiveUpdate();">
-										<label for="strategy5" class="menulabelsmall">Fox</label>
-									</div>
+								</form>
+								<div class="psuedo"></div>
+								<div>
+									<label for="showstats">Show Stats</label>
+									<input type="checkbox" id="showstats" onclick="ScoresCheckUpdate();">
 								</div>
-								<div class="menucolumn">
-									<h4 class="menucolumncontent">No Fox</h4>
-									<div class="menucolumncontent">
-										<input type="radio" id="strategy6" name="strategy" value="strat6" onclick="LiveUpdate();">
-										<label for="strategy6" class="menulabelsmall">Probability</label>
-									</div>
-									<div class="menucolumncontent">
-										<input type="radio" id="strategy7" name="strategy" value="strat7" onclick="LiveUpdate();">
-										<label for="strategy7" class="menulabelsmall">Weighted</label>
-									</div>
-									<div class="menucolumncontent">
-										<input type="radio" id="strategy8" name="strategy" value="strat8" onclick="LiveUpdate();">
-										<label for="strategy8" class="menulabelsmall">Swords</label>
-									</div>
-									<div class="menucolumncontent">
-										<input type="radio" id="strategy9" name="strategy" value="strat9" onclick="LiveUpdate();">
-										<label id="medstratlabel2" for="strategy9" class="menulabelsmall">Coffer</label>
-									</div>
+								<div>
+									<label for="liveupdate">Live Update</label>
+									<input type="checkbox" id="liveupdate" onclick="LiveUpdate(); ScoresCheckUpdate();" checked>
 								</div>
 							</div>
-						</form>
-					</div>
-					<div>
-						<h1>Weights</h1>
-						<div>
-							<input id="smallWeight" type="number" value="100" pattern="[0-9]" min=0 max=100 class='weights'>
-							<label class="menulabel">Fox</label>
 						</div>
-						<div>
-							<input id="medWeight" type="number" value="35" pattern="[0-9]" min=0 max=100 class='weights'>
-							<label id="boxlabel" class="menulabel">Coffer</label>
-						</div>
-						<div>
-							<input id="largeWeight" type="number" value="30" pattern="[0-9]" min=0 max=100 class='weights'>
-							<label class="menulabel">Swords</label>
-						</div>
-					</div>
-					<div id="scorebox">
-						<input id="showvalue" type="checkbox" class="largelabelcheckbox" onclick="ShowScoresInBlocks()">
-						<label for="showvalue" class="menulabel">Show scores</label>
-					</div>
-					<div id="buttongroup">
-						<button id="applybutton" onclick="runGuaranteed()" class="menubutton">Apply</button>
-						<button id="resetbutton" onclick="reset()" class="menubutton">Reset</button>
-						<input id="liveupdate" type="checkbox" checked>
-						<label id="liveupdatelabel" for="liveupdate">Live Update</label>
 					</div>
 				</div>
-				<div id="wrapper">
-
-					<div id="container1" class="block" title="Empty" onclick="LiveUpdate();"></div>
-					<div id="container2" class="block" title="Empty" onclick="LiveUpdate();"></div>
-					<div id="container3" class="block" title="Empty" onclick="LiveUpdate();"></div>
-					<div id="container4" class="block" title="Empty" onclick="LiveUpdate();"></div>
-					<div id="container5" class="block" title="Empty" onclick="LiveUpdate();"></div>
-					<div id="container6" class="block" title="Empty" onclick="LiveUpdate();"></div>
-					<div id="container7" class="block" title="Empty" onclick="LiveUpdate();"></div>
-					<div id="container8" class="block" title="Empty" onclick="LiveUpdate();"></div>
-					<div id="container9" class="block" title="Empty" onclick="LiveUpdate();"></div>
-					<div id="container10" class="block" title="Empty" onclick="LiveUpdate();"></div>
-					<div id="container11" class="block" title="Empty" onclick="LiveUpdate();"></div>
-					<div id="container12" class="block" title="Empty" onclick="LiveUpdate();"></div>
-					<div id="container13" class="block" title="Empty" onclick="LiveUpdate();"></div>
-					<div id="container14" class="block" title="Empty" onclick="LiveUpdate();"></div>
-					<div id="container15" class="block" title="Empty" onclick="LiveUpdate();"></div>
-					<div id="container16" class="block" title="Empty" onclick="LiveUpdate();"></div>
-					<div id="container17" class="block" title="Empty" onclick="LiveUpdate();"></div>
-					<div id="container18" class="block" title="Empty" onclick="LiveUpdate();"></div>
-					<div id="container19" class="block" title="Empty" onclick="LiveUpdate();"></div>
-					<div id="container20" class="block" title="Empty" onclick="LiveUpdate();"></div>
-					<div id="container21" class="block" title="Empty" onclick="LiveUpdate();"></div>
-					<div id="container22" class="block" title="Empty" onclick="LiveUpdate();"></div>
-					<div id="container23" class="block" title="Empty" onclick="LiveUpdate();"></div>
-					<div id="container24" class="block" title="Empty" onclick="LiveUpdate();"></div>
-					<div id="container25" class="block" title="Empty" onclick="LiveUpdate();"></div>
-					<div id="container26" class="block" title="Empty" onclick="LiveUpdate();"></div>
-					<div id="container27" class="block" title="Empty" onclick="LiveUpdate();"></div>
-					<div id="container28" class="block" title="Empty" onclick="LiveUpdate();"></div>
-					<div id="container29" class="block" title="Empty" onclick="LiveUpdate();"></div>
-					<div id="container30" class="block" title="Empty" onclick="LiveUpdate();"></div>
-					<div id="container31" class="block" title="Empty" onclick="LiveUpdate();"></div>
-					<div id="container32" class="block" title="Empty" onclick="LiveUpdate();"></div>
-					<div id="container33" class="block" title="Empty" onclick="LiveUpdate();"></div>
-					<div id="container34" class="block" title="Empty" onclick="LiveUpdate();"></div>
-					<div id="container35" class="block" title="Empty" onclick="LiveUpdate();"></div>
-					<div id="container36" class="block" title="Empty" onclick="LiveUpdate();"></div>
-
-				</div>
-
 			</div>
-			<div id="descriptionbox">
-				<br>
-				<span class="description">
-					Working on developing color palettes for color blind accessibility. Added tool tips for the mean time. Please contact me with any other accessibility issues.
-				</span>
-				<h3>
-					Instructions
-				</h3>
-				<span class="description">
-					Note: "2x2" is synonymous with "Coffer" or "Gift Box", and "Bias" is synonymous with "orientation".
-				</span>
-				<br>
-				<span class="description">
-					Select a box type from the top of the left side bar.
-				</span>
-				<span class="description">
-					Click on a box to apply the selected type.
-				</span>
-				<span class="description">
-					Select a strategy and set weight values.
-				</span>
-				<span class="description">
-					Click "Apply" to calculate the next move if live updates are off.
-				</span>
-				<span class="description">
-					Yellow boxes indicate the best current choice based on strategy.
-				</span>
-				<span class="description">
-					When swords are uncovered, the graphic can be used to determine it's full location, or just it's orientation, or just don't bother.
-				</span>
-				<span class="description">
-					If only the orientation is determined, check either the vertical or horizontal bias.
-				</span>
-				<span class="description">
-					When 2x2 is uncovered, use the graphic to determine if it's a Coffer or a Gift Box.
-				</span>
-				<br>
-				<span class="description">
-					Note: Weights only apply to "Weighted" strategy.
-				</span>
-				<br>
-				<span class="description">
-					Suggestion: If using weights, change the swords weight to 15 after a retelling.
-				</span>
-				<br>
-				<h3>
-					About
-				</h3>
-				<span class="description">
-					This is an attempt at making a statistical approach to to the Faux Hollows minigame that released in 5.3.
-				</span>
-				<span class="description">
-					Now that the minigame has been released, a number of assumptions were confirmed. Except for one:
-				</span>
-				<br>
-				<span class="description indented">
-					The fox will <b>ALWAYS</b> appear.
-				</span>
-				<br>
-				<span class="description">
-					This has since proven not to be the case. The fox is not guaranteed to appear. As such, additional strategies have been added. These are listed under "No Fox" in the Strategies section.
-				</span>
-				<span class="description">
-					The exact chance that the Fox will appear is not known, at least to me. If anyone should know this information, please contact me through one of the avenues below.
-				</span>
-				<br>
-				<h3>Minor disclaimer</h3>
-				<span class="description">
-					This calculator will <b>NOT</b> guarantee anything. Not a single reward is guaranteed for using this tool. What it provides is a statistical advantage. Even statistics, by it's nature, is falliable.
-				</span>
-				<br>
-				<span class="description">
-					Also, this is my first forray into web programming. If something breaks, send me a DM on Discord at Sturalke#0249 or on Reddit at <a href="https://www.reddit.com/user/Sturalke">u/Sturalke</a>. I'll do what I can to figure out what went wrong.
-				</span>
-				<span class="signature">
-					Created by Fyrin Niyuun on Faerie. <a href="https://github.com/Sturalke/FauxHollowsProbabilisticSolver">GitHub</a>
-				</span>
+			<div id="about" class="contentpane dp-low rounded about">
+				<div class="dp-high rounded about-pane">
+					<h1>Faux Hollows Solver</h1>
+				</div>
+				<div class="h-separator"></div>
+				<div class="dp-high rounded about-pane">
+					<h3>About</h3>
+					<span>Attempt two at making a usable Faux Hollows minigame solver.</span>
+					<br>
+					<span>This time I hope I did it justice for anyone colorblind. Also focused on better browser compatibility.</span>
+					<br>
+					<br>
+					<span>The default settings are recommended for most people. Additional options are available in the advanced drop down menu. Most of this contains alternative strategies for focusing on particular game pieces, changing the coffer to a gift box, and more. Feel free to explore.</span>
+					<br>
+					<h3>Disclaimer</h3>
+					<span>This calculator will NOT guarantee anything. Not a single reward is guaranteed for using this tool. What it provides is a statistical advantage.</span>
+					<br>
+					<h3>Contact</h3>
+					<span>This tool was developed by Fyrin Niyuun @ Behemoth. Formerly on Faerie.</span>
+					<br>
+					<span>If there are any issues please contact me on Discord at Sturalke#0249, by submitting an issue on Github, on Reddit at u/Sturalke, or if you find me in game.</span>
+					<br>
+					<br>
+					<span><a href="https://github.com/Sturalke/FauxHollowsProbabilisticSolver">Github</a> | <a href="https://www.reddit.com/user/Sturalke">u/Sturalke</a></span>
+				</div>
 			</div>
 		</div>
 	</div>
+	<!--Load JS last-->
+	<script src="code.js">
+	</script>
 </body>
 
 </html>
