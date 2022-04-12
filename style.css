@@ -304,13 +304,17 @@ a:active {
 
 
 @media only screen and (max-width: 1105px) {
+	#content {
+		display: inline-block;
+	}
 	.contentpane {
 		float: none;
 	}
 	.about {
 		display: inline-block;
 		max-width: 400px;
-		margin-left: 0;
+		margin-left: 20px;
+		margin-right: 20px;
 		margin-top: 10px;
 	}
 }
