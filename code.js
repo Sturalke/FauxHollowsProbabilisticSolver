@@ -36,31 +36,41 @@ const fhs_empty_state = "0";
 const fhs_prediction_state = "6";
 
 document.addEventListener("keydown", function(event) {
-	var index = -1;
-	switch (event.key) {
-		case '1':
-			index = 0;
-			break;
-		case '2':
-			index = 1;
-			break;
-		case '3':
-			index = 2;
-			break;
-		case '4':
-			index = 3;
-			break;
-		case '5':
-			index = 4;
-			break;
-		case '6':
-			index = 5;
-			break;
-		default:
-			break;
-	}
-	if (index >= 0) {
-		document.getElementsByName("pickeritem")[index].checked = true;
+	var isEditingWeights = false;
+	var weights = document.querySelectorAll("input[type=number]");
+	var selection = document.activeElement;
+	Array.prototype.forEach.call(weights, function(weight) {
+		if(weight == selection) {
+			isEditingWeights = true;
+		}
+	});
+	if(!isEditingWeights) {
+		var index = -1;
+		switch (event.key) {
+			case '1':
+				index = 0;
+				break;
+			case '2':
+				index = 1;
+				break;
+			case '3':
+				index = 2;
+				break;
+			case '4':
+				index = 3;
+				break;
+			case '5':
+				index = 4;
+				break;
+			case '6':
+				index = 5;
+				break;
+			default:
+				break;
+		}
+		if (index >= 0) {
+			document.getElementsByName("pickeritem")[index].checked = true;
+		}
 	}
 });
 
@@ -124,6 +134,12 @@ resetlabel.addEventListener("mouseleave", removeResetPressed);
 */
 
 
+/*
+
+	Other Listeners
+
+*/
+
 var cells = document.getElementsByClassName('board-cell');
 Array.prototype.forEach.call(cells, function(cell) {
 	cell.addEventListener("click", CellClick);
@@ -139,7 +155,28 @@ Array.prototype.forEach.call(buttons, function(rbutton) {
 	rbutton.addEventListener("mouseleave", radioOpacity);
 });
 
+var stratRadios = document.querySelectorAll("input[type=radio][name=strat]");
+Array.prototype.forEach.call(stratRadios, function(strat) {
+	strat.addEventListener("change", LiveUpdate);
+});
 
+var lookForFoxCheck = document.getElementById("lookforfox");
+lookForFoxCheck.addEventListener("click", LiveUpdate);
+
+var weightFeilds = document.querySelectorAll("input[type=number]");
+Array.prototype.forEach.call(weightFeilds, function(weight) {
+	weight.addEventListener("change", function() {
+		if(document.getElementById("strat5").checked) {
+			LiveUpdate();
+		}
+	});
+});
+
+/*
+
+	End Listeners
+
+*/
 
 
 function CellClick() {
@@ -447,8 +484,8 @@ function UpdatePrediction() {
 			if (state == fhs_prediction_state) {
 				cell.setAttribute("data-state", fhs_empty_state);
 				UpdateCell(cell);
-			}
-			if (state == fhs_empty_state) {
+				maxScore = Math.max(fhs_grid_scores[i][j], maxScore);
+			} else if (state == fhs_empty_state) {
 				maxScore = Math.max(fhs_grid_scores[i][j], maxScore);
 			}
 		}
