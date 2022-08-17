@@ -1,13 +1,13 @@
-//import "./styles.css";
+// TODO: Live Update on box type change
 
-const fhs_blocked_icon_url = "https://img.icons8.com/external-flatart-icons-outline-flatarticons/64/000000/external-blocked-user-interface-flatart-icons-outline-flatarticons.png";
-const fhs_missed_icon_url = "https://img.icons8.com/glyph-neue/64/000000/firework-explosion.png";
-const fhs_chest_icon_url = "https://img.icons8.com/ios/50/000000/treasure-chest.png";
-const fhs_present_icon_url = "https://img.icons8.com/ios/50/000000/gift--v1.png";
-const fhs_swords_icon_url = "https://img.icons8.com/external-prettycons-lineal-prettycons/49/000000/external-swords-games-prettycons-lineal-prettycons.png";
-const fhs_fox_icon_url = "https://img.icons8.com/external-tulpahn-basic-outline-tulpahn/48/000000/external-fox-hokkaido-tulpahn-basic-outline-tulpahn.png";
-const fhs_erase_icon_url = "https://img.icons8.com/ios-glyphs/60/000000/erase.png";
-const fhs_prediction_icon_url = "https://img.icons8.com/ios/50/000000/define-location--v1.png";
+const fhs_blocked_icon_url = "images/blocked.png";
+const fhs_missed_icon_url = "images/missed.png";
+const fhs_chest_icon_url = "images/chest.png";
+const fhs_present_icon_url = "images/present.png";
+const fhs_swords_icon_url = "images/swords.png";
+const fhs_fox_icon_url = "images/fox.png";
+const fhs_erase_icon_url = "images/erase.png";
+const fhs_prediction_icon_url = "images/prediction.png";
 const fhs_blank_icon_uri = "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=";
 
 const fhs_blocked_color = "rgb(140, 140, 140)";
