@@ -8,24 +8,30 @@ const fhs_swords_icon_url = "images/swords.png";
 const fhs_fox_icon_url = "images/fox.png";
 const fhs_erase_icon_url = "images/erase.png";
 const fhs_prediction_icon_url = "images/prediction.png";
+const fhs_verified_icon_url = "images/verified.png";
+const fhs_sighting_icon_url = "images/sighting.png";
 const fhs_blank_icon_uri = "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=";
 
 const fhs_blocked_color = "rgb(140, 140, 140)";
 const fhs_missed_color = "rgb(255, 80, 80)";
 const fhs_chest_color = "rgb(102, 255, 51)";
 const fhs_swords_color = "rgb(51, 204, 255)";
-const fhs_fox_color = "rgb(204, 51, 255)";
+const fhs_fox_color = "rgb(153, 51, 204)";
 const fhs_empty_color = "rgb(255, 255, 255)";
 const fhs_prediction_color = "rgb(255,215,0)";
+const fhs_verified_color = "rgb(255,51,255)";
+const fhs_sighting_color = "rgb(255,153,51)";
 
 const fhs_blocked_name = "Blocked";
 const fhs_missed_name = "Missed";
-const fhs_chest_name = "Chest";
+const fhs_chest_name = "Coffer";
 const fhs_present_name = "Gift Box";
 const fhs_swords_name = "Swords";
 const fhs_fox_name = "Fox";
 const fhs_empty_name = "Empty";
 const fhs_prediction_name = "Prediction";
+const fhs_verified_name = "Verified Sighting";
+const fhs_sighting_name = "Sighting";
 
 const fhs_blocked_state = "1";
 const fhs_missed_state = "2";
@@ -34,6 +40,29 @@ const fhs_swords_state = "4";
 const fhs_fox_state = "5";
 const fhs_empty_state = "0";
 const fhs_prediction_state = "6";
+const fhs_verified_state = "7";
+const fhs_sighting_state = "8";
+const fhs_prediction_verified_state = "9";
+const fhs_prediction_sighting_state = "10";
+
+const fhs_sheet_patterns = [
+	[ 8,10,13,26,35],
+	[ 9,13,16,28,30],
+	[ 0, 9,22,25,27],
+	[ 5, 7,19,22,26],
+	[ 3,13,16,21,32],
+	[ 9,12,20,23,27],
+	[ 3,14,19,22,32],
+	[ 8,12,15,23,26],
+	[ 4, 7,15,25,33],
+	[ 7,10,18,21,29],
+	[ 2,10,20,28,31],
+	[ 6,14,17,25,28],
+	[ 7,16,18,27,32],
+	[ 2,10,12,19,27],
+	[ 3, 8,17,19,28],
+	[ 8,16,23,25,33]
+];
 
 document.addEventListener("keydown", function(event) {
 	var isEditingWeights = false;
@@ -163,6 +192,12 @@ Array.prototype.forEach.call(stratRadios, function(strat) {
 var lookForFoxCheck = document.getElementById("lookforfox");
 lookForFoxCheck.addEventListener("click", LiveUpdate);
 
+var spreadsheet = document.getElementById("spreadsheet");
+spreadsheet.addEventListener("click", function() {
+	ClearSightings();
+	UpdateSightings();
+});
+
 var weightFeilds = document.querySelectorAll("input[type=number]");
 Array.prototype.forEach.call(weightFeilds, function(weight) {
 	weight.addEventListener("change", function() {
@@ -254,6 +289,18 @@ function updateTitles() {
 			case fhs_prediction_state:
 				cell.setAttribute('title', fhs_prediction_name);
 				break;
+			case fhs_verified_state:
+				cell.setAttribute('title', fhs_verified_name);
+				break;
+			case fhs_sighting_state:
+				cell.setAttribute('title', fhs_sighting_name);
+				break;
+			case fhs_prediction_verified_state:
+				cell.setAttribute('title', fhs_prediction_name + " and " + fhs_verified_name);
+				break;
+			case fhs_prediction_sighting_state:
+				cell.setAttribute('title', fhs_prediction_name + " and " + fhs_sighting_name);
+				break;
 			default:
 				break;
 		}
@@ -279,6 +326,16 @@ function UpdateCoffer() {
 	} else {
 		weight.value = 25;
 	}
+	
+	var cells = document.getElementsByClassName('board-cell');
+	Array.prototype.forEach.call(cells, function(cell) {
+		var childImage = cell.querySelector("img");
+		var state_value = cell.getAttribute("data-state");
+		if (state_value == fhs_chest_state) {
+			childImage.setAttribute('src', url);
+			cell.setAttribute('title', name);
+		}
+	});
 }
 
 function isCofferSet() {
@@ -301,6 +358,10 @@ function chestOrPresentURL() {
 	}
 }
 
+function doFoxSightings() {
+	return document.getElementById("spreadsheet").checked;
+}
+
 function doLiveUpdate() {
 	return document.getElementById("liveupdate").checked;
 }
@@ -320,36 +381,67 @@ function UpdateCell(cell) {
 			cell.style.backgroundColor = fhs_empty_color;
 			childImage.setAttribute('src', fhs_blank_icon_uri);
 			cell.setAttribute('title', fhs_empty_name);
+			cell.classList.remove('diagonal-mix');
 			break;
 		case fhs_blocked_state:
 			cell.style.backgroundColor = fhs_blocked_color;
 			childImage.setAttribute('src', fhs_blocked_icon_url);
 			cell.setAttribute('title', fhs_blocked_name);
+			cell.classList.remove('diagonal-mix');
 			break;
 		case fhs_missed_state:
 			cell.style.backgroundColor = fhs_missed_color;
 			childImage.setAttribute('src', fhs_missed_icon_url);
 			cell.setAttribute('title', fhs_missed_name);
+			cell.classList.remove('diagonal-mix');
 			break;
 		case fhs_chest_state:
 			cell.style.backgroundColor = fhs_chest_color;
 			childImage.setAttribute('src', chestOrPresentURL());
 			cell.setAttribute('title', chestOrPresentName());
+			cell.classList.remove('diagonal-mix');
 			break;
 		case fhs_swords_state:
 			cell.style.backgroundColor = fhs_swords_color;
 			childImage.setAttribute('src', fhs_swords_icon_url);
 			cell.setAttribute('title', fhs_swords_name);
+			cell.classList.remove('diagonal-mix');
 			break;
 		case fhs_fox_state:
 			cell.style.backgroundColor = fhs_fox_color;
 			childImage.setAttribute('src', fhs_fox_icon_url);
 			cell.setAttribute('title', fhs_fox_name);
+			cell.classList.remove('diagonal-mix');
 			break;
 		case fhs_prediction_state:
 			cell.style.backgroundColor = fhs_prediction_color;
 			childImage.setAttribute('src', fhs_prediction_icon_url);
 			cell.setAttribute('title', fhs_prediction_name);
+			cell.classList.remove('diagonal-mix');
+			break;
+		case fhs_verified_state:
+			cell.style.backgroundColor = fhs_verified_color;
+			childImage.setAttribute('src', fhs_verified_icon_url);
+			cell.setAttribute('title', fhs_verified_name);
+			cell.classList.remove('diagonal-mix');
+			break;
+		case fhs_sighting_state:
+			cell.style.backgroundColor = fhs_sighting_color;
+			childImage.setAttribute('src', fhs_sighting_icon_url);
+			cell.setAttribute('title', fhs_sighting_name);
+			cell.classList.remove('diagonal-mix');
+			break;
+		case fhs_prediction_verified_state:
+			cell.style.backgroundColor = fhs_verified_color;
+			childImage.setAttribute('src', fhs_prediction_icon_url);
+			cell.setAttribute('title', fhs_prediction_name + " and " + fhs_verified_name);
+			cell.classList.add('diagonal-mix');
+			break;
+		case fhs_prediction_sighting_state:
+			cell.style.backgroundColor = fhs_sighting_color;
+			childImage.setAttribute('src', fhs_prediction_icon_url);
+			cell.setAttribute('title', fhs_prediction_name + " and " + fhs_sighting_name);
+			cell.classList.remove('diagonal-mix');
 			break;
 		default:
 			console.error("Invalid cell state.");
@@ -380,7 +472,10 @@ function UpdateScoresInCells() {
 				var cell = document.getElementById("cell" + numStr);
 				var state = cell.getAttribute("data-state");
 				var span = cell.querySelector("span");
-				if (state == fhs_empty_state || state == fhs_prediction_state) {
+				if (state == fhs_empty_state || state == fhs_prediction_state ||
+					state == fhs_verified_state || state == fhs_sighting_state ||
+					state == fhs_prediction_verified_state ||
+					state == fhs_prediction_sighting_state) {
 					span.innerHTML = (window.fhs_grid_scores[i][j] * 100).toFixed(2);
 				} else {
 					span.innerHTML = "";
@@ -396,6 +491,45 @@ function ClearAllCellText() {
 		var span = cell.querySelector("span");
 		span.innerHTML = "";
 	});
+}
+
+function ClearPredictionsAndSightings() {
+	for (var i = 0; i < 6; i++) {
+		for (var j = 0; j < 6; j++) {
+			var numStr = IndexFormat(j + 6 * i);
+			var cell = document.getElementById("cell" + numStr);
+			var state = cell.getAttribute("data-state");
+			if (state == fhs_prediction_state ||
+				state == fhs_verified_state ||
+				state == fhs_sighting_state ||
+				state == fhs_prediction_sighting_state ||
+				state == fhs_prediction_verified_state) {
+				cell.setAttribute("data-state", fhs_empty_state);
+				UpdateCell(cell);
+			}
+		}			
+	}
+}
+
+function ClearSightings() {
+	for (var i = 0; i < 6; i++) {
+		for (var j = 0; j < 6; j++) {
+			var numStr = IndexFormat(j + 6 * i);
+			var cell = document.getElementById("cell" + numStr);
+			var state = cell.getAttribute("data-state");
+			if (state == fhs_verified_state ||
+				state == fhs_sighting_state) {
+				cell.setAttribute("data-state", fhs_empty_state);
+				UpdateCell(cell);
+			} else if (state == fhs_prediction_sighting_state) {
+				cell.setAttribute("data-state", fhs_prediction_state);
+				UpdateCell(cell);
+			} else if (state == fhs_prediction_verified_state) {
+				cell.setAttribute("data-state", fhs_prediction_state);
+				UpdateCell(cell);
+			}
+		}			
+	}
 }
 
 function QueryShowScores() {
@@ -465,7 +599,7 @@ function ParseGrid() {
 				window.fhs_grid[i][j] = 5;
 			}
 			else {
-				// Empty and Prediction states
+				// Empty, Verified, Sighting, and Prediction states
 				window.fhs_grid[i][j] = 0;
 			}
 		}
@@ -485,7 +619,17 @@ function UpdatePrediction() {
 				cell.setAttribute("data-state", fhs_empty_state);
 				UpdateCell(cell);
 				maxScore = Math.max(fhs_grid_scores[i][j], maxScore);
-			} else if (state == fhs_empty_state) {
+			} else if (state == fhs_prediction_verified_state) {
+				cell.setAttribute("data-state", fhs_verified_state);
+				UpdateCell(cell);
+				maxScore = Math.max(fhs_grid_scores[i][j], maxScore);
+			} else if (state == fhs_prediction_sighting_state) {
+				cell.setAttribute("data-state", fhs_sighting_state);
+				UpdateCell(cell);
+				maxScore = Math.max(fhs_grid_scores[i][j], maxScore);
+			} else if (state == fhs_empty_state ||
+					   state == fhs_verified_state ||
+					   state == fhs_sighting_color) {
 				maxScore = Math.max(fhs_grid_scores[i][j], maxScore);
 			}
 		}
@@ -496,13 +640,142 @@ function UpdatePrediction() {
 				var numStr = IndexFormat(j + 6 * i);
 				var cell = document.getElementById("cell" + numStr);
 				var state = cell.getAttribute("data-state");
-				if (fhs_grid_scores[i][j] == maxScore && state == fhs_empty_state) {
+				var isMax = fhs_grid_scores[i][j] == maxScore;
+				if (isMax && state == fhs_empty_state) {
 					cell.setAttribute("data-state", fhs_prediction_state);
+					UpdateCell(cell);
+				} else if (isMax && state == fhs_verified_state) {
+					cell.setAttribute("data-state", fhs_prediction_verified_state);
+					UpdateCell(cell);
+				} else if (isMax && state == fhs_sighting_state) {
+					cell.setAttribute("data-state", fhs_prediction_sighting_state);
 					UpdateCell(cell);
 				}
 			}
 		}
 	}
+}
+
+function UpdateSightings() {
+	if (!doFoxSightings()) {
+		return;
+	}
+	
+	var type = IdentifyPattern();
+	
+	if (type != -1) {
+		var verifiedGrid = PrefillArray();
+		var sightingGrid = PrefillArray();
+		fhs_sheet_fox[type].forEach((board) => {
+			var match = true;
+outerloop:
+			for (var i = 0; i < 6; i++) {
+				for (var j = 0; j < 6; j++) {
+					if (window.fhs_grid[i][j] == 2) {
+						if (board[i][j] != 0 && board[i][j] != 4 && board[i][j] != 5) {
+							match = false;
+							break outerloop;
+						}
+					} else if (window.fhs_grid[i][j] == 3) {
+						if (board[i][j] != 2) {
+							match = false;
+							break outerloop;
+						}
+					} else if (window.fhs_grid[i][j] == 4) {
+						if (board[i][j] != 3) {
+							match = false;
+							break outerloop;
+						}
+					} else if (window.fhs_grid[i][j] == 5) {
+						// Fox already in grid, no need for any further processing
+						return;
+					}
+					
+				}
+			}
+			if (match) {
+				for (var i = 0; i < 6; i++) {
+					for (var j = 0; j < 6; j++) {
+						if (board[i][j] == 4) {
+							verifiedGrid[i][j]++;
+						} else if (board[i][j] == 5) {
+							sightingGrid[i][j]++;
+						}
+					}
+				}
+			}
+		});
+		for (var i = 0; i < 6; i++) {
+			for (var j = 0; j < 6; j++) {
+				var updated = false;
+				var numStr = IndexFormat(j + 6 * i);
+				var cell = document.getElementById("cell" + numStr);
+				var state = cell.getAttribute("data-state");
+				if (state == fhs_verified_state) {
+					cell.setAttribute("data-state", fhs_empty_state);
+					state = fhs_empty_state;
+					updated = true;
+				}
+				if (state == fhs_sighting_state) {
+					cell.setAttribute("data-state", fhs_empty_state);
+					state = fhs_empty_state;
+					updated = true;
+				}
+				if (sightingGrid[i][j] > 0 && state != fhs_missed_state) {
+					if (state == fhs_prediction_state || state == fhs_prediction_sighting_state) {
+						cell.setAttribute("data-state", fhs_prediction_sighting_state);
+					} else {
+						cell.setAttribute("data-state", fhs_sighting_state);
+					}
+					updated = true;
+				}
+				if (verifiedGrid[i][j] > 0 && state != fhs_missed_state) {
+					if (state == fhs_prediction_state || state == fhs_prediction_verified_state) {
+						cell.setAttribute("data-state", fhs_prediction_verified_state);
+					} else {
+						cell.setAttribute("data-state", fhs_verified_state);
+					}
+					updated = true;
+				}
+				if (updated) {
+					UpdateCell(cell);
+				}
+			}
+		}
+	}
+}
+
+function IdentifyPattern() {
+	var positions = [0,0,0,0,0];
+	var ind = 0;
+	for (var i = 0; i < 6; i++) {
+		for (var j = 0; j < 6; j++) {
+			if (fhs_grid[i][j] == 1 && ind < 5) {
+				positions[ind++] = i*6 + j;
+			} else if (ind > 5) {
+				return -1;
+			}
+		}
+	}
+	var exists = fhs_sheet_patterns.some(row => JSON.stringify(row) === JSON.stringify(positions));
+	if (exists) {
+		var match = true;
+		for (var i = 0; i < fhs_sheet_patterns.length; i++) {
+innerloop:
+			for (var j = 0; j < 5; j++) {
+				if (positions[j] == fhs_sheet_patterns[i][j]) {
+					match = true;
+				} else {
+					match = false;
+					break innerloop;
+				}
+			}
+			if (match) {
+				return i;
+			}
+		}
+	}
+	return -1;
 }
 
 function MarkGuaranteedBlocks() {
@@ -624,7 +897,9 @@ function runGuaranteed() {
 			break;
 	}
 	UpdateScoresInCells();
+	ClearPredictionsAndSightings();
 	UpdatePrediction();
+	UpdateSightings();
 }
 
 
