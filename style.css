@@ -87,6 +87,12 @@ a:active {
 	height: 50px;
 	padding-top: calc((100% - 50px) / 2);
 }
+.diagonal-mix {
+	background-image: linear-gradient(315deg, transparent 50%, rgb(255,215,0) 50%);
+	background-image: -webkit-linear-gradient(315deg, transparent 50%, rgb(255,215,0) 50%);
+	background-image: -moz-linear-gradient(315deg, transparent 50%, rgb(255,215,0) 50%);
+	background-image: -o-linear-gradient(315deg, transparent 50%, rgb(255,215,0) 50%);
+}
 .board-cell-text {
 	text-align: center;
 	margin-top: auto;
@@ -164,7 +170,7 @@ a:active {
 	background-color: rgba(51, 204, 255, 0.8);
 }
 #button5 {
-	background-color: rgba(204, 51, 255, 0.8);
+	background-color: rgba(153, 51, 204, 0.8);
 }
 #button6 {
 	background-color: rgba(255, 255, 255, 0.8);
